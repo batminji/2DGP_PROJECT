@@ -9,12 +9,14 @@ def handle_events():
     global running
 
     events = get_events()
+
     for event in events:
         if event.type == SDL_QUIT:
             running = False
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             running = False
-
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_RETURN:
+            world.remove(title)
 
 def reset_world():
     global running
@@ -25,9 +27,6 @@ def reset_world():
     running = True
     world = []
 
-    # grass = Grass()
-    # world.append(grass)
-
     title = Title()
     world.append(title)
 
@@ -35,8 +34,6 @@ def reset_world():
 def update_world():
     for o in world:
         o.update()
-    pass
-
 
 def render_world():
     clear_canvas()
