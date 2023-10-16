@@ -1,12 +1,15 @@
 from pico2d import *
 
 from title import Title
+from game_list import Game_List
 
 SCREENX, SCREENY = 1915, 1015
+GAME_NUM = 0
 
 
 def handle_events():
     global running
+    global screen_num
 
     events = get_events()
 
@@ -15,20 +18,30 @@ def handle_events():
             running = False
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             running = False
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_RETURN:
-            world.remove(title)
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_RETURN and screen_num == 0:
+            world.clear()
+            screen_num += 1
+            world.append(Game_List())
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_RETURN and screen_num == 1:
+            world.clear()
+            screen_num += 1
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_UP and screen_num == 1:
+            pass
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_DOWN and screen_num == 1:
+            pass
+
+
 
 def reset_world():
     global running
     global world
-
-    global title
+    global screen_num
+    screen_num = 0
 
     running = True
     world = []
 
-    title = Title()
-    world.append(title)
+    world.append(Title())
 
 
 def update_world():
