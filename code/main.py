@@ -10,6 +10,8 @@ GAME_NUM = 0
 def handle_events():
     global running
     global screen_num
+    global game_list
+    global GAME_NUM
 
     events = get_events()
     for event in events:
@@ -17,17 +19,30 @@ def handle_events():
             running = False
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             running = False
+        # game start
         elif event.type == SDL_KEYDOWN and event.key == SDLK_RETURN and screen_num == 0:
             world.clear()
             screen_num += 1
-            world.append(Game_List())
+            game_list = Game_List()
+            world.append(game_list)
+        # game choose
         elif event.type == SDL_KEYDOWN and event.key == SDLK_RETURN and screen_num == 1:
             world.clear()
             screen_num += 1
+        # game list up down
         elif event.type == SDL_KEYDOWN and event.key == SDLK_UP and screen_num == 1:
-            pass
+            if GAME_NUM == 0:
+                pass
+            else:
+                GAME_NUM -= 1
+                game_list.get_GAME_NUM(GAME_NUM)
         elif event.type == SDL_KEYDOWN and event.key == SDLK_DOWN and screen_num == 1:
-            pass
+            if GAME_NUM == 4:
+                pass
+            else:
+                GAME_NUM += 1
+                game_list.get_GAME_NUM(GAME_NUM)
+
 
 
 
@@ -41,12 +56,6 @@ def reset_world():
     world = []
 
     world.append(Title())
-
-
-def handle_world():
-    for o in world:
-        o.handle_events()
-
 
 def update_world():
     for o in world:
@@ -64,7 +73,6 @@ reset_world()
 
 while running:
     handle_events()
-    handle_world()
     update_world()
     render_world()
     delay(0.05)

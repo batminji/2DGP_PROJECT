@@ -5,15 +5,8 @@ class Game_List:
     def __init__(self):
         self.frame = 0
         self.image = load_image('game_list.png')
-    def handle_events(self):
-        events = get_events()
-        for event in events:
-            if event.type == SDL_KEYDOWN and event.key == SDLK_UP:
-                if self.frame > 0 :
-                    self.frame -= 1
-            elif event.type == SDL_KEYDOWN and event.key == SDLK_DOWN:
-                if self.frame < 4:
-                    self.frame += 1
+    def get_GAME_NUM(self, GAME_NUM):
+        self.frame = GAME_NUM
     def update(self):
         pass
     def draw(self):
