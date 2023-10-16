@@ -1,6 +1,8 @@
 from pico2d import *
 
-from title import*
+from title import Title
+
+SCREENX , SCREENY = 1915, 1015
 
 def handle_events():
     global running
@@ -36,9 +38,9 @@ def render_world():
     update_canvas()
 
 
-open_canvas()
+open_canvas(SCREENX, SCREENY)
 reset_world()
-# game loop
+
 while running:
     handle_events()
     update_world()
