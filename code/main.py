@@ -12,7 +12,6 @@ def handle_events():
     global screen_num
 
     events = get_events()
-
     for event in events:
         if event.type == SDL_QUIT:
             running = False
@@ -44,6 +43,11 @@ def reset_world():
     world.append(Title())
 
 
+def handle_world():
+    for o in world:
+        o.handle_events()
+
+
 def update_world():
     for o in world:
         o.update()
@@ -60,6 +64,7 @@ reset_world()
 
 while running:
     handle_events()
+    handle_world()
     update_world()
     render_world()
     delay(0.05)

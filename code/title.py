@@ -34,3 +34,6 @@ class Title:
         self.logo.clip_draw(0, 0, 290, 164, self.logo_x, 750, 650, 420)
         self.char1.clip_draw(self.frame1 * 93, 0, 93, 96, self.char1_x, 275, 186, 192)
         self.char2.clip_draw(self.frame2 * 93, 0, 93, 96, self.char2_x, 275, 186, 192)
+
+    def handle_events(self):
+        pass
