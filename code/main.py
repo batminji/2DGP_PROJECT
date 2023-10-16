@@ -44,8 +44,6 @@ def handle_events():
                 game_list.get_GAME_NUM(GAME_NUM)
 
 
-
-
 def reset_world():
     global running
     global world
@@ -57,9 +55,11 @@ def reset_world():
 
     world.append(Title())
 
+
 def update_world():
     for o in world:
         o.update()
+
 
 def render_world():
     clear_canvas()
