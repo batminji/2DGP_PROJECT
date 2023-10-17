@@ -2,6 +2,13 @@ from pico2d import*
 
 SCREENX, SCREENY = 1915, 1015
 
+# state
+# 0 : 걷기
+# 1 : 준비
+# 2 : 달리기
+# 3 : 이김
+# 4 : 짐
+
 class Marathon:
     def __init__(self):
         # track
@@ -24,17 +31,46 @@ class Marathon:
         self.ai_win = load_image('resource/ai_win.png')
         self.ai_x = 0
         self.ai_frame = 0
+        self.ai_state = 0
         # player
-        self.player_walk = load_image('resource/ai_walk.png')
+        self.player_walk = load_image('resource/player_walk.png')
         self.player_ready = load_image('resource/player_ready.png')
         self.player_run = load_image('resource/player_run.png')
         self.player_lose = load_image('resource/player_lose.png')
         self.player_win = load_image('resource/player_win.png')
         self.player_x = 0
         self.player_frame = 0
+        self.player_state = 0
 
     def update(self):
-        pass
+        # ai player
+        if self.ai_state == 0 :
+            self.ai_frame = (self.ai_frame + 1) % 9
+            self.ai_x += 5
+            if self.ai_x >= 260:
+                self.ai_state, self.ai_frame = 1, 0
+        elif self.ai_state == 1 :
+            self.ai_frame += 1
+            if self.ai_frame == 4:
+                self.ai_state, self.ai_frame = 2, 0
+        elif self.ai_state == 2 :
+            self.ai_frame = (self.ai_frame + 1) % 6
+            self.track2_x += 10
+
+        # player
+        if self.player_state == 0 :
+            self.player_frame = (self.player_frame + 1) % 9
+            self.player_x += 5
+            if self.player_x >= 260:
+                self.player_state, self.player_frame = 1, 0
+        elif self.player_state == 1 :
+            self.player_frame += 1
+            if self.player_frame == 4:
+                self.player_state, self.player_frame = 2, 0
+        elif self.player_state == 2 :
+            self.player_frame = (self.player_frame + 1) % 6
+            self.track1_x += 10
+
     def draw(self):
         # track
         self.grass1.clip_draw(0, 0, SCREENX, 24, SCREENX // 2, 153, SCREENX, 116)
@@ -45,3 +81,12 @@ class Marathon:
         self.blue_bar.clip_draw(0, 0, 500, 25, SCREENX // 2, 430, SCREENX, 200)
         self.crowd.clip_draw(self.crowd_x, 0, 250, 15, SCREENX // 2, 580, SCREENX, 100)
         self.blue_bar2.clip_draw(0, 0, 500, 6, SCREENX // 2, 655, SCREENX, 50)
+        # ai player
+        if self.ai_state == 0 : self.ai_walk.clip_draw(self.ai_frame * 50, 0, 50, 100, self.ai_x, 300, 50, 100)
+        elif self.ai_state == 1 : self.ai_ready.clip_draw(self.ai_frame * 96, 0, 96, 96, self.ai_x, 300, 96, 100)
+        elif self.ai_state == 2 : self.ai_run.clip_draw(self.ai_frame * 93, 0, 93, 96, self.ai_x, 300, 96, 100)
+
+        # player
+        if self.player_state == 0 : self.player_walk.clip_draw(self.player_frame * 50, 0, 50, 100, self.player_x, 100, 50, 100)
+        elif self.player_state == 1 : self.player_ready.clip_draw(self.player_frame * 96, 0, 96, 96, self.player_x, 100, 96, 100)
+        elif self.player_state == 2 : self.player_run.clip_draw(self.player_frame * 93, 0, 93, 96, self.player_x, 100, 96, 100)
