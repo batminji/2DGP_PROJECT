@@ -17,7 +17,21 @@ class Marathon:
         self.crowd_x = 0
         self.blue_bar2 = load_image('resource/blue_bar2_500x6.png')
         # ai player
-        # self.ai_player = load_image()
+        self.ai_walk = load_image('resource/ai_walk.png')
+        self.ai_ready = load_image('resource/ai_ready.png')
+        self.ai_run = load_image('resource/ai_run.png')
+        self.ai_lose = load_image('resource/ai_lose.png')
+        self.ai_win = load_image('resource/ai_win.png')
+        self.ai_x = 0
+        self.ai_frame = 0
+        # player
+        self.player_walk = load_image('resource/ai_walk.png')
+        self.player_ready = load_image('resource/player_ready.png')
+        self.player_run = load_image('resource/player_run.png')
+        self.player_lose = load_image('resource/player_lose.png')
+        self.player_win = load_image('resource/player_win.png')
+        self.player_x = 0
+        self.player_frame = 0
 
     def update(self):
         pass
