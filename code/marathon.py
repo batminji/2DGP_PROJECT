@@ -18,31 +18,40 @@ class Marathon:
         self.track2_x = 0
         self.grass1 = load_image('resource/long_grass_2257x24.png')
         self.grass2 = load_image('resource/long_grass2_160x8.png')
+        self.grass1_x, self.grass2_x = 0, 0
         # crowd
         self.blue_bar = load_image('resource/blue_bar_500x25.png')
         self.crowd = load_image('resource/crowd_500x15.png')
         self.crowd_x = 0
         self.blue_bar2 = load_image('resource/blue_bar2_500x6.png')
         # ai player
-        self.ai_walk = load_image('resource/ai_walk.png')
-        self.ai_ready = load_image('resource/ai_ready.png')
-        self.ai_run = load_image('resource/ai_run.png')
-        self.ai_lose = load_image('resource/ai_lose.png')
-        self.ai_win = load_image('resource/ai_win.png')
+        self.ai_walk = load_image('AI/ai_walk.png')
+        self.ai_ready = load_image('AI/ai_ready.png')
+        self.ai_run = load_image('AI/ai_run.png')
+        self.ai_lose = load_image('AI/ai_lose.png')
+        self.ai_win = load_image('AI/ai_win.png')
         self.ai_x = 0
         self.ai_frame = 0
         self.ai_state = 0
         # player
-        self.player_walk = load_image('resource/player_walk.png')
-        self.player_ready = load_image('resource/player_ready.png')
-        self.player_run = load_image('resource/player_run.png')
-        self.player_lose = load_image('resource/player_lose.png')
-        self.player_win = load_image('resource/player_win.png')
+        self.player_walk = load_image('PLAYER/player_walk.png')
+        self.player_ready = load_image('PLAYER/player_ready.png')
+        self.player_run = load_image('PLAYER/player_run.png')
+        self.player_lose = load_image('PLAYER/player_lose.png')
+        self.player_win = load_image('PLAYER/player_win.png')
         self.player_x = 0
         self.player_frame = 0
         self.player_state = 0
 
     def update(self):
+        # background
+        if self.ai_state == 2:
+            self.grass1_x += 5
+            if self.grass1_x >= 340: self.grass1_x = 0
+            self.grass2_x += 5
+            if self.grass2_x >= 80: self.grass2_x = 0
+            self.crowd_x += 5
+            if self.crowd_x >= 250: self.crowd_x = 0
         # ai player
         if self.ai_state == 0 :
             self.ai_frame = (self.ai_frame + 1) % 9
@@ -73,8 +82,9 @@ class Marathon:
 
     def draw(self):
         # track
-        self.grass1.clip_draw(0, 0, SCREENX, 24, SCREENX // 2, 153, SCREENX, 116)
-        self.grass2.clip_draw(0, 0, 160, 8, SCREENX // 2, 310, SCREENX, 40)
+        self.grass1.clip_draw(self.grass1_x, 0, SCREENX, 24, SCREENX // 2, 153, SCREENX, 116)
+        self.grass2.clip_draw(self.grass2_x, 0, 80, 8, SCREENX // 2, 310, SCREENX, 40)
+
         self.track1.clip_draw(self.track1_x, 0, 500, 17, SCREENX // 2, 55, SCREENX, 80)
         self.track2.clip_draw(self.track2_x, 0, 500, 17, SCREENX // 2, 250, SCREENX, 80)
         # crowd
