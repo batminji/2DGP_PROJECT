@@ -42,6 +42,10 @@ def handle_events():
             else:
                 GAME_NUM += 1
                 game_list.get_GAME_NUM(GAME_NUM)
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_RETURN and screen_num == 1:
+            screen_num += 1
+            if GAME_NUM == 0: # 100m 달리기
+                pass
 
 
 def reset_world():

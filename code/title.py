@@ -6,12 +6,12 @@ SCREENX, SCREENY = 1915, 1015
 
 class Title:
     def __init__(self):
-        self.background = load_image('title_background.png')
+        self.background = load_image('resource/title_background.png')
         self.x, self.y = SCREENX // 2, SCREENY // 2
-        self.logo = load_image('title_logo.png')
+        self.logo = load_image('resource/title_logo.png')
         self.logo_x = 2500
-        self.char1 = load_image('player_run.png')
-        self.char2 = load_image('ai_run.png')
+        self.char1 = load_image('resource/player_run.png')
+        self.char2 = load_image('resource/ai_run.png')
         self.frame1, self.frame2 = random.randint(0, 6), random.randint(0, 6)
         self.char1_x, self.char2_x = 0, 0
         self.char1_speed, self.char2_speed = 10, 15

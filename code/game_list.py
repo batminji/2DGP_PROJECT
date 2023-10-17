@@ -6,8 +6,8 @@ SCREENX, SCREENY = 1915, 1015
 class Game_List:
     def __init__(self):
         self.frame = 0
-        self.image = load_image('game_list.png')
-        self.star = load_image('star55x383.png')
+        self.image = load_image('resource/game_list.png')
+        self.star = load_image('resource/star55x383.png')
         self.star_frame = 0
 
     def get_GAME_NUM(self, GAME_NUM):
