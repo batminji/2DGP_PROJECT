@@ -2,6 +2,7 @@ from pico2d import *
 
 from title import Title
 from game_list import Game_List
+from marathon import *
 
 SCREENX, SCREENY = 1915, 1015
 GAME_NUM = 0
@@ -12,6 +13,7 @@ def handle_events():
     global screen_num
     global game_list
     global GAME_NUM
+    global marathon
 
     events = get_events()
     for event in events:
@@ -29,6 +31,9 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_RETURN and screen_num == 1:
             world.clear()
             screen_num += 1
+            if GAME_NUM == 0:  # 100m 달리기
+                marathon = Marathon()
+                world.append(marathon)
         # game list up down
         elif event.type == SDL_KEYDOWN and event.key == SDLK_UP and screen_num == 1:
             if GAME_NUM == 0:
@@ -42,10 +47,7 @@ def handle_events():
             else:
                 GAME_NUM += 1
                 game_list.get_GAME_NUM(GAME_NUM)
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_RETURN and screen_num == 1:
-            screen_num += 1
-            if GAME_NUM == 0: # 100m 달리기
-                pass
+
 
 
 def reset_world():
