@@ -18,6 +18,7 @@ class Marathon:
         self.grass1 = load_image('resource/long_grass_2257x24.png')
         self.grass2 = load_image('resource/long_grass2_160x8.png')
         self.grass1_x, self.grass2_x = 0, 0
+        self.goal_line_1 = load_image('resource/goal_line_1.png')
         self.ai_goal_line_x, self.player_goal_line_x = SCREENX + 20, SCREENX + 20
         # crowd
         self.blue_bar = load_image('resource/blue_bar_500x25.png')
@@ -46,12 +47,13 @@ class Marathon:
     def update(self):
         # background
         if self.ai_state == 2:
-            self.grass1_x += 2
-            if self.grass1_x >= 177: self.grass1_x = 0
-            self.grass2_x += 2
-            if self.grass2_x >= 80: self.grass2_x = 0
-            self.crowd_x += 2
-            if self.crowd_x >= 250: self.crowd_x = 0
+            if self.track2_x < 1850:
+                self.grass1_x += 2
+                if self.grass1_x >= 177: self.grass1_x = 0
+                self.grass2_x += 2
+                if self.grass2_x >= 80: self.grass2_x = 0
+                self.crowd_x += 2
+                if self.crowd_x >= 250: self.crowd_x = 0
         # ai player
         if self.ai_state == 0:
             self.ai_frame = (self.ai_frame + 1) % 9
@@ -99,8 +101,8 @@ class Marathon:
         self.track.clip_draw(self.track1_x, 0, SCREENX, 80, SCREENX // 2, 55, SCREENX, 80)
         self.track.clip_draw(self.track2_x, 0, SCREENX, 80, SCREENX // 2, 250, SCREENX, 80)
 
-        # self.goal_line_1.clip_draw(0, 0, 22, 40, self.player_goal_line_x, 85, 88, 140)
-        # self.goal_line_1.clip_draw(0, 0, 22, 40, self.ai_goal_line_x, 280, 88, 140)
+        # self.goal_line_1.clip_draw(0, 0, 73, 132, self.player_goal_line_x, 80, 73, 130)
+        # self.goal_line_1.clip_draw(0, 0, 73, 132, self.ai_goal_line_x, 275, 73, 130)
         # crowd
         self.blue_bar.clip_draw(0, 0, 500, 25, SCREENX // 2, 430, SCREENX, 200)
         self.crowd.clip_draw(self.crowd_x, 0, 250, 15, SCREENX // 2, 580, SCREENX, 100)
