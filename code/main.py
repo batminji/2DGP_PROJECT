@@ -1,5 +1,6 @@
 from pico2d import *
 
+import game_world
 from title import Title
 from game_list import Game_List
 from marathon import Marathon
@@ -24,20 +25,20 @@ def handle_events():
             running = False
         # game start
         elif event.type == SDL_KEYDOWN and event.key == SDLK_RETURN and screen_num == 0:
-            world.clear()
+            game_world.clear()
             screen_num += 1
             game_list = Game_List()
-            world.append(game_list)
+            game_world.add_object(game_list, 0)
         # game choose
         elif event.type == SDL_KEYDOWN and event.key == SDLK_RETURN and screen_num == 1:
-            world.clear()
+            game_world.clear()
             screen_num += 1
             if GAME_NUM == 0:  # 100m 달리기
                 game = Marathon()
-                world.append(game)
+                game_world.add_object(game_list, 0)
             elif GAME_NUM == 1: # 기계 체조
                 game = Vault()
-                world.append(game)
+                game_world.add_object(game_list, 0)
         # game list up down
         elif event.type == SDL_KEYDOWN and event.key == SDLK_UP and screen_num == 1:
             if GAME_NUM == 0:
@@ -56,25 +57,21 @@ def handle_events():
 
 def reset_world():
     global running
-    global world
     global screen_num
     screen_num = 0
 
     running = True
-    world = []
-
-    world.append(Title())
+    title = Title()
+    game_world.add_object(title, 0)
 
 
 def update_world():
-    for o in world:
-        o.update()
+    game_world.update()
 
 
 def render_world():
     clear_canvas()
-    for o in world:
-        o.draw()
+    game_world.render()
     update_canvas()
 
 

@@ -1,5 +1,6 @@
 from pico2d import *
 
+
 objects = [[], [], []]
 
 def add_object(o, depth = 0):
@@ -25,3 +26,8 @@ def remove_object(o):
             layer.remove(o)
             return
     raise ValueError('존재하지 않은 객체를 지우려고 합니다.')
+
+def clear():
+    global objects
+    objects.clear()
+    objects = [[], [], []]
