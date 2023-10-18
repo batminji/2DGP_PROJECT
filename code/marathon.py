@@ -18,8 +18,8 @@ class Marathon:
         self.grass1 = load_image('resource/long_grass_2257x24.png')
         self.grass2 = load_image('resource/long_grass2_160x8.png')
         self.grass1_x, self.grass2_x = 0, 0
-        self.goal_line_1 = load_image('resource/goal_line_1.png')
-        self.ai_goal_line_x, self.player_goal_line_x = SCREENX + 20, SCREENX + 20
+        self.goal_line= load_image('resource/goal_line_1.png')
+        self.ai_goal_line_x, self.player_goal_line_x = SCREENX + 40, SCREENX + 40
         # crowd
         self.blue_bar = load_image('resource/blue_bar_500x25.png')
         self.crowd = load_image('resource/crowd_500x15.png')
@@ -70,9 +70,21 @@ class Marathon:
                 self.track2_x += 20
             elif self.track2_x >= 1450 and self.track2_x < 1850:
                 self.track2_x += 20
-                self.ai_goal_line_x -= 20
+                self.ai_goal_line_x -= 50
             else:
-                self.ai_x += 20
+                if self.ai_x >= 955 and self.ai_x < 1055: # 기록 측정 하기
+                    self.ai_x += 20
+                    self.goal_line = load_image('resource/goal_line_2.png')
+                elif self.ai_x >= 1200: # 기록 비교 후 승리 판정
+                    self.ai_frame = 0
+                    self.ai_state = 4
+                else:
+                    self.ai_x += 20
+        elif self.ai_state == 3: # 이김
+            self.ai_frame = (self.ai_frame + 1) % 2
+        elif self.ai_state == 4: # 짐
+            self.ai_frame = (self.ai_frame + 1) % 2
+
         # player
         if self.player_state == 0:
             self.player_frame = (self.player_frame + 1) % 9
@@ -89,11 +101,26 @@ class Marathon:
                 self.track1_x += 20
             elif self.track1_x >= 1450 and self.track1_x < 1850:
                 self.track1_x += 20
-                self.player_goal_line_x -= 10
+                self.player_goal_line_x -= 50
             else:
-                self.player_x += 20
+                if self.player_x >= 955 and self.player_x < 1055:  # 기록 측정 하기
+                    self.player_x += 20
+                    self.goal_line = load_image('resource/goal_line_2.png')
+                elif self.player_x >= 1200:  # 기록 비교 후 승리 판정
+                    self.player_frame = 0
+                    self.player_state = 3
+                else:
+                    self.player_x += 20
+        elif self.player_state == 3:
+            self.player_frame = (self.player_frame + 1) % 2
+        elif self.player_state == 4:
+            self.player_frame = (self.player_frame + 1) % 2
 
     def draw(self):
+        # crowd
+        self.blue_bar.clip_draw(0, 0, 500, 25, SCREENX // 2, 430, SCREENX, 200)
+        self.crowd.clip_draw(self.crowd_x, 0, 250, 15, SCREENX // 2, 580, SCREENX, 100)
+        self.blue_bar2.clip_draw(0, 0, 500, 6, SCREENX // 2, 655, SCREENX, 50)
         # track
         self.grass1.clip_draw(self.grass1_x, 0, 80, 24, SCREENX // 2, 153, SCREENX, 116)
         self.grass2.clip_draw(self.grass2_x, 0, 80, 8, SCREENX // 2, 310, SCREENX, 40)
@@ -101,12 +128,9 @@ class Marathon:
         self.track.clip_draw(self.track1_x, 0, SCREENX, 80, SCREENX // 2, 55, SCREENX, 80)
         self.track.clip_draw(self.track2_x, 0, SCREENX, 80, SCREENX // 2, 250, SCREENX, 80)
 
-        # self.goal_line_1.clip_draw(0, 0, 73, 132, self.player_goal_line_x, 80, 73, 130)
-        # self.goal_line_1.clip_draw(0, 0, 73, 132, self.ai_goal_line_x, 275, 73, 130)
-        # crowd
-        self.blue_bar.clip_draw(0, 0, 500, 25, SCREENX // 2, 430, SCREENX, 200)
-        self.crowd.clip_draw(self.crowd_x, 0, 250, 15, SCREENX // 2, 580, SCREENX, 100)
-        self.blue_bar2.clip_draw(0, 0, 500, 6, SCREENX // 2, 655, SCREENX, 50)
+        self.goal_line.clip_draw(0, 0, 73, 132, self.player_goal_line_x, 80, 73, 130)
+        self.goal_line.clip_draw(0, 0, 73, 132, self.ai_goal_line_x, 275, 73, 130)
+
         # ai player
         if self.ai_state == 0:
             self.ai_walk.clip_draw(self.ai_frame * 50, 0, 50, 100, self.ai_x, 325, 75, 150)
@@ -114,6 +138,10 @@ class Marathon:
             self.ai_ready.clip_draw(self.ai_frame * 96, 0, 96, 96, self.ai_x, 325, 150, 150)
         elif self.ai_state == 2:
             self.ai_run.clip_draw(self.ai_frame * 93, 0, 93, 96, self.ai_x, 325, 150, 150)
+        elif self.ai_state == 3:
+            self.ai_win.clip_draw(self.ai_frame * 72, 0, 72, 96, self.ai_x, 325, 100, 150)
+        elif self.ai_state == 4:
+            self.ai_lose.clip_draw(self.ai_frame * 48, 0, 48, 96, self.ai_x, 325, 75, 150)
 
         # player
         if self.player_state == 0:
@@ -122,3 +150,7 @@ class Marathon:
             self.player_ready.clip_draw(self.player_frame * 96, 0, 96, 96, self.player_x, 125, 150, 150)
         elif self.player_state == 2:
             self.player_run.clip_draw(self.player_frame * 93, 0, 93, 96, self.player_x, 125, 150, 150)
+        elif self.player_state == 3:
+            self.player_win.clip_draw(self.player_frame * 72, 0, 72, 96, self.player_x, 125, 100, 150)
+        elif self.player_state == 4:
+            self.player_lose.clip_draw(self.player_frame * 48, 0, 48, 96, self.player_x, 125, 75, 150)

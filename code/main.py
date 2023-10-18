@@ -35,10 +35,10 @@ def handle_events():
             screen_num += 1
             if GAME_NUM == 0:  # 100m 달리기
                 game = Marathon()
-                game_world.add_object(game_list, 0)
+                game_world.add_object(game, 0)
             elif GAME_NUM == 1: # 기계 체조
                 game = Vault()
-                game_world.add_object(game_list, 0)
+                game_world.add_object(game, 0)
         # game list up down
         elif event.type == SDL_KEYDOWN and event.key == SDLK_UP and screen_num == 1:
             if GAME_NUM == 0:
