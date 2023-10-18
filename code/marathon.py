@@ -43,6 +43,8 @@ class Marathon:
         self.player_x = 0
         self.player_frame = 0
         self.player_state = 0
+        # score
+        self.score_board = load_image('SCORE/score_board.png')
 
     def update(self):
         # background
@@ -82,8 +84,10 @@ class Marathon:
                     self.ai_x += 20
         elif self.ai_state == 3: # 이김
             self.ai_frame = (self.ai_frame + 1) % 2
+            delay(0.1)
         elif self.ai_state == 4: # 짐
             self.ai_frame = (self.ai_frame + 1) % 2
+            delay(0.1)
 
         # player
         if self.player_state == 0:
@@ -113,8 +117,10 @@ class Marathon:
                     self.player_x += 20
         elif self.player_state == 3:
             self.player_frame = (self.player_frame + 1) % 2
+            delay(0.1)
         elif self.player_state == 4:
             self.player_frame = (self.player_frame + 1) % 2
+            delay(0.1)
 
     def draw(self):
         # crowd
@@ -154,3 +160,6 @@ class Marathon:
             self.player_win.clip_draw(self.player_frame * 72, 0, 72, 96, self.player_x, 125, 100, 150)
         elif self.player_state == 4:
             self.player_lose.clip_draw(self.player_frame * 48, 0, 48, 96, self.player_x, 125, 75, 150)
+
+        # score
+        self.score_board.clip_draw(0, 0, 255, 93, SCREENX // 2, 845, SCREENX, 335)
