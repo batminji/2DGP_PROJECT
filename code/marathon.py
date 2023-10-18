@@ -1,6 +1,7 @@
-from pico2d import*
+from pico2d import *
 
 SCREENX, SCREENY = 1915, 1015
+
 
 # state
 # 0 : 걷기
@@ -46,43 +47,48 @@ class Marathon:
     def update(self):
         # background
         if self.ai_state == 2:
-            self.grass1_x += 5
-            if self.grass1_x >= 340: self.grass1_x = 0
-            self.grass2_x += 5
+            self.grass1_x += 1
+            if self.grass1_x >= 177: self.grass1_x = 0
+            self.grass2_x += 1
             if self.grass2_x >= 80: self.grass2_x = 0
-            self.crowd_x += 5
+            self.crowd_x += 1
             if self.crowd_x >= 250: self.crowd_x = 0
         # ai player
-        if self.ai_state == 0 :
+        if self.ai_state == 0:
             self.ai_frame = (self.ai_frame + 1) % 9
             self.ai_x += 5
             if self.ai_x >= 260:
                 self.ai_state, self.ai_frame = 1, 0
-        elif self.ai_state == 1 :
+        elif self.ai_state == 1:
             self.ai_frame += 1
             if self.ai_frame == 4:
                 self.ai_state, self.ai_frame = 2, 0
-        elif self.ai_state == 2 :
+        elif self.ai_state == 2:
             self.ai_frame = (self.ai_frame + 1) % 6
-            self.track2_x += 10
-
+            if self.track2_x < 500:
+                self.track2_x += 10
+            else:
+                self.ai_x += 10
         # player
-        if self.player_state == 0 :
+        if self.player_state == 0:
             self.player_frame = (self.player_frame + 1) % 9
             self.player_x += 5
             if self.player_x >= 260:
                 self.player_state, self.player_frame = 1, 0
-        elif self.player_state == 1 :
+        elif self.player_state == 1:
             self.player_frame += 1
             if self.player_frame == 4:
                 self.player_state, self.player_frame = 2, 0
-        elif self.player_state == 2 :
+        elif self.player_state == 2:
             self.player_frame = (self.player_frame + 1) % 6
-            self.track1_x += 10
+            if self.track1_x < 500:
+                self.track1_x += 10
+            else:
+                self.player_x += 10
 
     def draw(self):
         # track
-        self.grass1.clip_draw(self.grass1_x, 0, SCREENX, 24, SCREENX // 2, 153, SCREENX, 116)
+        self.grass1.clip_draw(self.grass1_x, 0, 80, 24, SCREENX // 2, 153, SCREENX, 116)
         self.grass2.clip_draw(self.grass2_x, 0, 80, 8, SCREENX // 2, 310, SCREENX, 40)
 
         self.track1.clip_draw(self.track1_x, 0, 500, 17, SCREENX // 2, 55, SCREENX, 80)
@@ -92,11 +98,17 @@ class Marathon:
         self.crowd.clip_draw(self.crowd_x, 0, 250, 15, SCREENX // 2, 580, SCREENX, 100)
         self.blue_bar2.clip_draw(0, 0, 500, 6, SCREENX // 2, 655, SCREENX, 50)
         # ai player
-        if self.ai_state == 0 : self.ai_walk.clip_draw(self.ai_frame * 50, 0, 50, 100, self.ai_x, 300, 50, 100)
-        elif self.ai_state == 1 : self.ai_ready.clip_draw(self.ai_frame * 96, 0, 96, 96, self.ai_x, 300, 96, 100)
-        elif self.ai_state == 2 : self.ai_run.clip_draw(self.ai_frame * 93, 0, 93, 96, self.ai_x, 300, 96, 100)
+        if self.ai_state == 0:
+            self.ai_walk.clip_draw(self.ai_frame * 50, 0, 50, 100, self.ai_x, 300, 50, 100)
+        elif self.ai_state == 1:
+            self.ai_ready.clip_draw(self.ai_frame * 96, 0, 96, 96, self.ai_x, 300, 96, 100)
+        elif self.ai_state == 2:
+            self.ai_run.clip_draw(self.ai_frame * 93, 0, 93, 96, self.ai_x, 300, 96, 100)
 
         # player
-        if self.player_state == 0 : self.player_walk.clip_draw(self.player_frame * 50, 0, 50, 100, self.player_x, 100, 50, 100)
-        elif self.player_state == 1 : self.player_ready.clip_draw(self.player_frame * 96, 0, 96, 96, self.player_x, 100, 96, 100)
-        elif self.player_state == 2 : self.player_run.clip_draw(self.player_frame * 93, 0, 93, 96, self.player_x, 100, 96, 100)
+        if self.player_state == 0:
+            self.player_walk.clip_draw(self.player_frame * 50, 0, 50, 100, self.player_x, 100, 50, 100)
+        elif self.player_state == 1:
+            self.player_ready.clip_draw(self.player_frame * 96, 0, 96, 96, self.player_x, 100, 96, 100)
+        elif self.player_state == 2:
+            self.player_run.clip_draw(self.player_frame * 93, 0, 93, 96, self.player_x, 100, 96, 100)
