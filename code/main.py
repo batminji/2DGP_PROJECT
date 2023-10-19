@@ -36,7 +36,7 @@ def handle_events():
             if GAME_NUM == 0:  # 100m 달리기
                 game = Marathon()
                 game_world.add_object(game, 0)
-            elif GAME_NUM == 1: # 기계 체조
+            elif GAME_NUM == 1:  # 기계 체조
                 game = Vault()
                 game_world.add_object(game, 0)
         # game list up down
@@ -52,7 +52,6 @@ def handle_events():
             else:
                 GAME_NUM += 1
                 game_list.get_GAME_NUM(GAME_NUM)
-
 
 
 def reset_world():

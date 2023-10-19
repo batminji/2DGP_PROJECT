@@ -18,7 +18,7 @@ class Marathon:
         self.grass1 = load_image('resource/long_grass_2257x24.png')
         self.grass2 = load_image('resource/long_grass2_160x8.png')
         self.grass1_x, self.grass2_x = 0, 0
-        self.goal_line= load_image('resource/goal_line_1.png')
+        self.goal_line = load_image('resource/goal_line_1.png')
         self.ai_goal_line_x, self.player_goal_line_x = SCREENX + 40, SCREENX + 40
         # crowd
         self.blue_bar = load_image('resource/blue_bar_500x25.png')
@@ -60,9 +60,10 @@ class Marathon:
         if self.ai_state == 0:
             self.ai_frame = (self.ai_frame + 1) % 9
             self.ai_x += 10
-            if self.ai_x >= 300:
+            if self.ai_x >= 330:
                 self.ai_state, self.ai_frame = 1, 0
         elif self.ai_state == 1:
+            delay(0.1)
             self.ai_frame += 1
             if self.ai_frame == 4:
                 self.ai_state, self.ai_frame = 2, 0
@@ -74,18 +75,18 @@ class Marathon:
                 self.track2_x += 20
                 self.ai_goal_line_x -= 50
             else:
-                if self.ai_x >= 955 and self.ai_x < 1055: # 기록 측정 하기
+                if self.ai_x >= 955 and self.ai_x < 1055:  # 기록 측정 하기
                     self.ai_x += 20
                     self.goal_line = load_image('resource/goal_line_2.png')
-                elif self.ai_x >= 1200: # 기록 비교 후 승리 판정
+                elif self.ai_x >= 1200:  # 기록 비교 후 승리 판정
                     self.ai_frame = 0
                     self.ai_state = 4
                 else:
                     self.ai_x += 20
-        elif self.ai_state == 3: # 이김
+        elif self.ai_state == 3:  # 이김
             self.ai_frame = (self.ai_frame + 1) % 2
             delay(0.1)
-        elif self.ai_state == 4: # 짐
+        elif self.ai_state == 4:  # 짐
             self.ai_frame = (self.ai_frame + 1) % 2
             delay(0.1)
 
@@ -93,9 +94,10 @@ class Marathon:
         if self.player_state == 0:
             self.player_frame = (self.player_frame + 1) % 9
             self.player_x += 10
-            if self.player_x >= 300:
+            if self.player_x >= 330:
                 self.player_state, self.player_frame = 1, 0
         elif self.player_state == 1:
+            delay(0.1)
             self.player_frame += 1
             if self.player_frame == 4:
                 self.player_state, self.player_frame = 2, 0
