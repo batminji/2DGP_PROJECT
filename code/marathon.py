@@ -46,6 +46,9 @@ class Marathon:
         # score
         self.score_board = load_image('SCORE/score_board.png')
 
+    def handle_events(self, e):
+        pass
+
     def update(self):
         # background
         if self.ai_state == 2:

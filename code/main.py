@@ -12,10 +12,6 @@ GAME_NUM = 0
 
 def handle_events():
     global running
-    global screen_num
-    global game_list
-    global GAME_NUM
-    global game
 
     events = get_events()
     for event in events:
@@ -23,46 +19,11 @@ def handle_events():
             running = False
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             running = False
-        # game start
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_RETURN and screen_num == 0:
-            game_world.clear()
-            screen_num += 1
-            game_list = Game_List()
-            game_world.add_object(game_list, 0)
-        # game choose
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_RETURN and screen_num == 1:
-            game_world.clear()
-            screen_num += 1
-            if GAME_NUM == 0:  # 100m 달리기
-                game = Marathon()
-                game_world.add_object(game, 0)
-            elif GAME_NUM == 1:  # 기계 체조
-                game = Vault()
-                game_world.add_object(game, 0)
-        # game list up down
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_UP and screen_num == 1:
-            if GAME_NUM == 0:
-                pass
-            else:
-                GAME_NUM -= 1
-                game_list.get_GAME_NUM(GAME_NUM)
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_DOWN and screen_num == 1:
-            if GAME_NUM == 4:
-                pass
-            else:
-                GAME_NUM += 1
-                game_list.get_GAME_NUM(GAME_NUM)
-        elif event.type == SDL_KEYDOWN and event.key == SDLK_DELETE and screen_num == 2:
-            game_world.clear()
-            GAME_NUM = 0
-            game_list = Game_List()
-            game_world.add_object(game_list, 0)
-            screen_num = 1
+        else:
+            game_world.handle_events(event)
 
 def reset_world():
     global running
-    global screen_num
-    screen_num = 0
 
     running = True
     title = Title()

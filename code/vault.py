@@ -46,6 +46,9 @@ class Vault:
         self.score_x = 3000
         self.player_score = 0
 
+    def handle_events(self, e):
+        pass
+
     def update(self):
         if self.player_state == 0:
             self.player_frame = (self.player_frame + 1) % 9

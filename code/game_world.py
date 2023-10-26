@@ -35,3 +35,8 @@ def clear():
     global objects
     objects.clear()
     objects = [[], [], []]
+
+def handle_events(e):
+    for layer in objects:
+        for o in layer:
+            o.handle_events(e)
