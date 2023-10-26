@@ -30,6 +30,7 @@ class Vault:
         self.player_x, self.player_y = -50, 280
         self.player_frame = 0
         self.player_state = 0
+        self.player_rad = 0
         # crowd
         self.blue_bar = load_image('resource/blue_bar_500x25.png')
         self.crowd = load_image('resource/crowd_500x15.png')
@@ -40,6 +41,7 @@ class Vault:
         self.judge_clap = load_image('resource/judge_clap.png')
         # score
         self.score_board = load_image('SCORE/score_board.png')
+        self.player_score = 0
 
     def update(self):
         if self.player_state == 0:
@@ -66,6 +68,36 @@ class Vault:
                 self.player_y -= 10
                 if self.player_y <= 400:
                     self.player_frame += 1
+            elif self.player_frame == 2:
+                delay(0.5)
+                self.player_frame += 1
+            elif self.player_frame == 3:
+                delay(0.5)
+                self.player_frame += 1
+                self.player_x += 30
+                self.player_y += 20
+            elif self.player_frame == 4:
+                delay(0.5)
+                self.player_state += 1
+                self.player_frame = 0
+        elif self.player_state == 3:
+            self.player_rad -= 120
+            self.player_score = (-self.player_rad) // 360
+            if self.player_x <= 1200:
+                self.player_x += 10
+                self.player_y += 10
+            else:
+                self.player_x += 10
+                self.player_y -= 10
+                if self.player_y <= 250:
+                    self.player_state += 1
+                    self.player_y += 50
+        elif self.player_state == 4:
+            delay(1.5)
+            self.player_state += 1
+        elif self.player_state == 5:
+            self.player_frame = (self.player_frame + 1) % 2
+
 
     def draw(self):
         # score
@@ -87,5 +119,15 @@ class Vault:
         elif self.player_state == 1: # 달리기
             self.player_run.clip_draw(self.player_frame * 93, 0, 93, 96, self.player_x, self.player_y, 150, 150)
         elif self.player_state == 2: # 점프하기
-            self.player_jump.clip_draw(self.player_frame * 133, 0, 133, 133, self.player_x, self.player_y, 150, 150)
-
+            if self.player_frame == 4:
+                self.player_jump.clip_draw(self.player_frame * 133, 0, 133, 133, self.player_x, self.player_y, 180, 180)
+            elif self.player_frame == 0:
+                self.player_jump.clip_draw(self.player_frame * 133, 0, 133, 133, self.player_x, self.player_y, 140, 140)
+            else:
+                self.player_jump.clip_draw(self.player_frame * 133, 0, 133, 133, self.player_x, self.player_y, 150, 150)
+        elif self.player_state == 3: # 돌기
+            self.player_rotate.clip_composite_draw(0, 0, 59, 67, self.player_rad, '', self.player_x, self.player_y, 90, 90)
+        elif self.player_state == 4:
+            self.player_finish.clip_draw(0, 0, 49, 104, self.player_x, self.player_y, 75, 150)
+        elif self.player_state == 5:
+            self.player_win.clip_draw(self.player_frame * 72, 0, 72, 96, self.player_x, self.player_y, 100, 150)
