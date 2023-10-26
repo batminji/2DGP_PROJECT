@@ -47,7 +47,23 @@ class Marathon:
         self.score_board = load_image('SCORE/score_board.png')
 
     def handle_events(self, e):
-        pass
+        if e.type == SDL_KEYDOWN and e.key == SDLK_SPACE:
+            if self.player_state == 2:
+                self.player_frame = (self.player_frame + 1) % 6
+                if self.track1_x < 1450:
+                    self.track1_x += 40
+                elif self.track1_x >= 1450 and self.track1_x < 1850:
+                    self.track1_x += 40
+                    self.player_goal_line_x -= 90
+                else:
+                    if self.player_x >= 955 and self.player_x < 1055:  # 기록 측정 하기
+                        self.player_x += 40
+                        self.goal_line = load_image('resource/goal_line_2.png')
+                    elif self.player_x >= 1200:  # 기록 비교 후 승리 판정
+                        self.player_frame = 0
+                        self.player_state = 3
+                    else:
+                        self.player_x += 40
 
     def update(self):
         # background
@@ -85,10 +101,8 @@ class Marathon:
                     self.ai_x += 20
         elif self.ai_state == 3:  # 이김
             self.ai_frame = (self.ai_frame + 1) % 2
-            delay(0.1)
         elif self.ai_state == 4:  # 짐
             self.ai_frame = (self.ai_frame + 1) % 2
-            delay(0.1)
 
         # player
         if self.player_state == 0:
@@ -102,27 +116,11 @@ class Marathon:
             if self.player_frame == 4:
                 self.player_state, self.player_frame = 2, 0
         elif self.player_state == 2:
-            self.player_frame = (self.player_frame + 1) % 6
-            if self.track1_x < 1450:
-                self.track1_x += 20
-            elif self.track1_x >= 1450 and self.track1_x < 1850:
-                self.track1_x += 20
-                self.player_goal_line_x -= 50
-            else:
-                if self.player_x >= 955 and self.player_x < 1055:  # 기록 측정 하기
-                    self.player_x += 20
-                    self.goal_line = load_image('resource/goal_line_2.png')
-                elif self.player_x >= 1200:  # 기록 비교 후 승리 판정
-                    self.player_frame = 0
-                    self.player_state = 3
-                else:
-                    self.player_x += 20
+            pass
         elif self.player_state == 3:
             self.player_frame = (self.player_frame + 1) % 2
-            delay(0.1)
         elif self.player_state == 4:
             self.player_frame = (self.player_frame + 1) % 2
-            delay(0.1)
 
     def draw(self):
         # crowd
