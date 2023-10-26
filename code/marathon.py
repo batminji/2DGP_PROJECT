@@ -50,12 +50,9 @@ class Marathon:
         # background
         if self.ai_state == 2:
             if self.track2_x < 1850:
-                self.grass1_x += 2
-                if self.grass1_x >= 177: self.grass1_x = 0
-                self.grass2_x += 2
-                if self.grass2_x >= 80: self.grass2_x = 0
-                self.crowd_x += 2
-                if self.crowd_x >= 250: self.crowd_x = 0
+                self.grass1_x = (self.grass1_x + 2) % 177
+                self.grass2_x = (self.grass2_x + 2) % 80
+                self.crowd_x = (self.crowd_x + 2) % 250
         # ai player
         if self.ai_state == 0:
             self.ai_frame = (self.ai_frame + 1) % 9

@@ -17,7 +17,9 @@ class Vault:
         self.track = load_image('resource/vault_track.png')
         self.vault_jump_board1 = load_image('resource/vault_jump_board.png')
         self.vault_jump_board2 = load_image('resource/vault_jump_board_2.png')
+        self.vault_landing_board = load_image('resource/vault_landing_board.png')
         self.vault_score = load_image('resource/vault_score.png')
+        self.vault_board_x = 2500
         # player
         self.player_walk = load_image('VAULT_PLAYER/player_walk.png')
         self.player_run = load_image('VAULT_PLAYER/player_run.png')
@@ -42,11 +44,13 @@ class Vault:
     def update(self):
         if self.player_state == 0:
             self.player_frame = (self.player_frame+1) % 9
-
             self.player_x += 5
+            if self.player_x >= 250:
+                self.player_state += 1
         elif self.player_state == 1:
-            self.crowd_x += 2
-            if self.crowd_x >= 250: self.crowd_x = 0
+            self.player_frame = (self.player_frame + 1) % 6
+            self.crowd_x = (self.crowd_x + 2) % 250
+            self.vault_board_x -= 10
 
     def draw(self):
         # score
@@ -58,6 +62,12 @@ class Vault:
         # track
         self.grass.clip_draw(0, 0, 40, 40, SCREENX // 2, 230, SCREENX, 460)
         self.track.clip_draw(0, 0, 1915, 24, SCREENX // 2, 200, SCREENX, 80)
+        # jump board
+        self.vault_jump_board2.clip_draw(0, 0, 170, 63, self.vault_board_x, 220, 170, 63)
+        self.vault_jump_board1.clip_draw(0,0,145, 89, self.vault_board_x + 600, 260, 220, 150)
+        self.vault_landing_board.clip_draw(0, 0, 572, 48, self.vault_board_x + 1400, 210, 700, 100)
         # player
         if self.player_state == 0: # 걸어가기
             self.player_walk.clip_draw(self.player_frame * 50, 0, 50, 100, self.player_x, self.player_y, 75, 150)
+        elif self.player_state == 1: # 달리기
+            self.player_run.clip_draw(self.player_frame * 93, 0, 93, 96, self.player_x, self.player_y, 150, 150)
