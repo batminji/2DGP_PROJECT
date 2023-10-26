@@ -39,6 +39,7 @@ class Vault:
         # judgement
         self.judge = load_image('resource/judge.png')
         self.judge_clap = load_image('resource/judge_clap.png')
+        self.judge_x = 3200
         # score
         self.score_board = load_image('SCORE/score_board.png')
         self.player_score = 0
@@ -54,6 +55,7 @@ class Vault:
             self.player_frame = (self.player_frame + 1) % 6
             self.crowd_x = (self.crowd_x + 2) % 250
             self.vault_board_x -= 20
+            self.judge_x -= 20
             if self.vault_board_x <= 200:
                 self.player_state += 1
                 self.player_frame = 0
@@ -109,6 +111,8 @@ class Vault:
         # track
         self.grass.clip_draw(0, 0, 40, 40, SCREENX // 2, 230, SCREENX, 460)
         self.track.clip_draw(0, 0, 1915, 24, SCREENX // 2, 200, SCREENX, 80)
+        # judgement
+        self.judge.clip_draw(0, 0, 94, 51, self.judge_x, 360, 300, 180)
         # jump board
         self.vault_jump_board2.clip_draw(0, 0, 170, 63, self.vault_board_x, 220, 170, 63)
         self.vault_jump_board1.clip_draw(0,0,145, 89, self.vault_board_x + 600, 260, 220, 150)
