@@ -59,13 +59,13 @@ class Vault:
                 self.player_frame = 0
         elif self.player_state == 2:
             if self.player_frame == 0:
-                self.player_x += 10
-                self.player_y += 10
+                self.player_x += 20
+                self.player_y += 20
                 if self.player_x >= 600:
                     self.player_frame += 1
             elif self.player_frame == 1:
-                self.player_x += 10
-                self.player_y -= 10
+                self.player_x += 20
+                self.player_y -= 20
                 if self.player_y <= 400:
                     self.player_frame += 1
             elif self.player_frame == 2:

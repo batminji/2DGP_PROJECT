@@ -52,7 +52,12 @@ def handle_events():
             else:
                 GAME_NUM += 1
                 game_list.get_GAME_NUM(GAME_NUM)
-
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_DELETE and screen_num == 2:
+            game_world.clear()
+            GAME_NUM = 0
+            game_list = Game_List()
+            game_world.add_object(game_list, 0)
+            screen_num = 1
 
 def reset_world():
     global running
