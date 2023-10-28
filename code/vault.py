@@ -42,9 +42,11 @@ class Vault:
         self.judge_clap = load_image('resource/judge_clap.png')
         self.judge_x, self.judge_frame = 3200, 0
         # score
-        self.score_board = load_image('SCORE/score_board.png')
         self.score_x = 3000
         self.player_score = 0
+        # sky
+        self.sky = load_image('resource/sky.png')
+        self.sky_x = 0
 
         global press_a, press_s, press_d
         press_a, press_s, press_d = False, False, True
@@ -71,6 +73,7 @@ class Vault:
         elif self.player_state == 1:
             self.player_frame = (self.player_frame + 1) % 6
             self.crowd_x = (self.crowd_x + 2) % 250
+            self.sky_x = (self.sky_x + 2) % 1915
             self.vault_board_x -= 20
             self.judge_x -= 20
             self.score_x -= 20
@@ -120,8 +123,8 @@ class Vault:
             self.judge_frame = (self.judge_frame + 1) % 2
 
     def draw(self):
-        # score
-        self.score_board.clip_draw(0, 0, 255, 93, SCREENX // 2, 845, SCREENX, 335)
+        # sky
+        self.sky.clip_draw(self.sky_x, 0, SCREENX, 287, SCREENX / 2, 845, SCREENX, 400)
         # crowd
         self.blue_bar.clip_draw(0, 0, 500, 25, SCREENX // 2, 430, SCREENX, 200)
         self.crowd.clip_draw(self.crowd_x, 0, 250, 15, SCREENX // 2, 580, SCREENX, 100)

@@ -44,8 +44,9 @@ class Marathon:
         self.player_x = 0
         self.player_frame = 0
         self.player_state = 0
-        # score
-        self.score_board = load_image('SCORE/score_board.png')
+
+        self.sky = load_image('resource/sky.png')
+        self.sky_x = 0
 
     def handle_events(self, e):
         if e.type == SDL_KEYDOWN and e.key == SDLK_SPACE:
@@ -73,6 +74,7 @@ class Marathon:
                 self.grass1_x = (self.grass1_x + 2) % 177
                 self.grass2_x = (self.grass2_x + 2) % 80
                 self.crowd_x = (self.crowd_x + 2) % 250
+                self.sky_x = (self.sky_x + 2) % 1915
         # ai player
         if self.ai_state == 0:
             self.ai_frame = (self.ai_frame + 1) % 9
@@ -124,6 +126,8 @@ class Marathon:
             self.player_frame = (self.player_frame + 1) % 2
 
     def draw(self):
+        # sky
+        self.sky.clip_draw(self.sky_x, 0, SCREENX, 287, SCREENX / 2, 845, SCREENX, 400)
         # crowd
         self.blue_bar.clip_draw(0, 0, 500, 25, SCREENX // 2, 430, SCREENX, 200)
         self.crowd.clip_draw(self.crowd_x, 0, 250, 15, SCREENX // 2, 580, SCREENX, 100)
@@ -162,5 +166,4 @@ class Marathon:
         elif self.player_state == 4:
             self.player_lose.clip_draw(self.player_frame * 48, 0, 48, 96, self.player_x, 125, 75, 150)
 
-        # score
-        self.score_board.clip_draw(0, 0, 255, 93, SCREENX // 2, 845, SCREENX, 335)
+
