@@ -2,6 +2,7 @@ from pico2d import *
 import game_world
 from marathon import Marathon
 from vault import Vault
+from steeplechase import Steeplechase
 
 SCREENX, SCREENY = 1915, 1015
 
@@ -38,7 +39,9 @@ class Game_List:
                 vault = Vault()
                 game_world.add_object(vault, 0)
             elif self.frame == 2:
-                pass
+                game_world.clear()
+                steeplechase = Steeplechase()
+                game_world.add_object(steeplechase, 0)
             elif self.frame == 3:
                 pass
             elif self.frame == 4:
