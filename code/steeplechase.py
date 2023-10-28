@@ -8,7 +8,6 @@ SCREENX, SCREENY = 1915, 1015
 class Steeplechase:
     def __init__(self):
         pass
-
     def handle_events(self, e):
         pass
     def update(self):
