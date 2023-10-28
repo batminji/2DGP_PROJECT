@@ -42,6 +42,8 @@ class Vault:
         self.judge_clap = load_image('resource/judge_clap.png')
         self.judge_x, self.judge_frame = 3200, 0
         # score
+        self.score = load_image('resource/number.png')
+        self.score_frame = 0
         self.score_x = 3000
         self.player_score = 0
         # sky
@@ -105,6 +107,7 @@ class Vault:
                 self.player_frame = 0
         elif self.player_state == 3:
             self.player_score = (-self.player_rad) // 360
+            self.score_frame = self.player_score
             if self.player_x <= 1200:
                 self.player_x += 10
                 self.player_y += 10
@@ -139,6 +142,7 @@ class Vault:
             self.judge_clap.clip_draw(self.judge_frame * 94, 0, 94, 51, self.judge_x, 360, 300, 180)
         # score
         self.vault_score.clip_draw(0, 0, 80, 64, self.score_x, 305, 80, 64)
+        self.score.clip_draw(self.score_frame * 16, 0, 16, 14, self.score_x, 310, 32, 28)
         # jump board
         self.vault_jump_board2.clip_draw(0, 0, 170, 63, self.vault_board_x, 220, 170, 63)
         self.vault_jump_board1.clip_draw(0, 0, 145, 89, self.vault_board_x + 600, 260, 220, 150)
