@@ -18,7 +18,8 @@ class Marathon:
         self.grass1 = load_image('resource/long_grass_2257x24.png')
         self.grass2 = load_image('resource/long_grass2_160x8.png')
         self.grass1_x, self.grass2_x = 0, 0
-        self.goal_line = load_image('resource/goal_line_1.png')
+        self.goal_line1 = load_image('resource/goal_line_1.png')
+        self.goal_line2 = load_image('resource/goal_line_1.png')
         self.ai_goal_line_x, self.player_goal_line_x = SCREENX + 40, SCREENX + 40
         # crowd
         self.blue_bar = load_image('resource/blue_bar_500x25.png')
@@ -58,7 +59,7 @@ class Marathon:
                 else:
                     if self.player_x >= 955 and self.player_x < 1055:  # 기록 측정 하기
                         self.player_x += 40
-                        self.goal_line = load_image('resource/goal_line_2.png')
+                        self.goal_line1 = load_image('resource/goal_line_2.png')
                     elif self.player_x >= 1200:  # 기록 비교 후 승리 판정
                         self.player_frame = 0
                         self.player_state = 3
@@ -93,7 +94,7 @@ class Marathon:
             else:
                 if self.ai_x >= 955 and self.ai_x < 1055:  # 기록 측정 하기
                     self.ai_x += 20
-                    self.goal_line = load_image('resource/goal_line_2.png')
+                    self.goal_line2 = load_image('resource/goal_line_2.png')
                 elif self.ai_x >= 1200:  # 기록 비교 후 승리 판정
                     self.ai_frame = 0
                     self.ai_state = 4
@@ -134,8 +135,8 @@ class Marathon:
         self.track.clip_draw(self.track1_x, 0, SCREENX, 80, SCREENX // 2, 55, SCREENX, 80)
         self.track.clip_draw(self.track2_x, 0, SCREENX, 80, SCREENX // 2, 250, SCREENX, 80)
 
-        self.goal_line.clip_draw(0, 0, 73, 132, self.player_goal_line_x, 80, 73, 130)
-        self.goal_line.clip_draw(0, 0, 73, 132, self.ai_goal_line_x, 275, 73, 130)
+        self.goal_line1.clip_draw(0, 0, 73, 132, self.player_goal_line_x, 80, 73, 130)
+        self.goal_line2.clip_draw(0, 0, 73, 132, self.ai_goal_line_x, 275, 73, 130)
 
         # ai player
         if self.ai_state == 0:

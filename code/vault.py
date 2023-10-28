@@ -46,8 +46,20 @@ class Vault:
         self.score_x = 3000
         self.player_score = 0
 
+        global press_a, press_s, press_d
+        press_a, press_s, press_d = False, False, True
+
     def handle_events(self, e):
-        pass
+        global press_a, press_s, press_d
+        if self.player_state == 3 and press_d and e.type == SDL_KEYDOWN and e.key == SDLK_a:
+            self.player_rad -= 120
+            press_a, press_d = press_d, press_a
+        if self.player_state == 3 and press_a and e.type == SDL_KEYDOWN and e.key == SDLK_s:
+            self.player_rad -= 120
+            press_a, press_s = press_s, press_a
+        if self.player_state == 3 and press_s and e.type == SDL_KEYDOWN and e.key == SDLK_d:
+            self.player_rad -= 120
+            press_s, press_d = press_d, press_s
 
     def update(self):
         if self.player_state == 0:
@@ -89,7 +101,6 @@ class Vault:
                 self.player_state += 1
                 self.player_frame = 0
         elif self.player_state == 3:
-            self.player_rad -= 120
             self.player_score = (-self.player_rad) // 360
             if self.player_x <= 1200:
                 self.player_x += 10
