@@ -37,6 +37,23 @@ class Steeplechase:
         # sky
         self.sky = load_image('resource/sky.png')
         self.sky_x = 0
+        # ai player
+        self.ai_walk = load_image('STEEPLE_AI/ai_walk.png')
+        self.ai_run = load_image('STEEPLE_AI/ai_run.png')
+        self.ai_ready = load_image('STEEPLE_AI/ai_ready.png')
+        self.ai_hurdle = load_image('STEEPLE_AI/ai_hurdle.png')
+        self.ai_win = load_image('STEEPLE_AI/ai_win.png')
+        self.ai_lose = load_image('STEEPLE_AI/ai_lose.png')
+        self.ai_x, self.ai_y, self.ai_state = 0, 325, 0
+        # player
+        self.player_walk = load_image('STEEPLE_PLAYER/player_walk.png')
+        self.player_run = load_image('STEEPLE_PLAYER/player_run.png')
+        self.player_ready = load_image('STEEPLE_PLAYER/player_ready.png')
+        self.player_hurdle = load_image('STEEPLE_PLAYER/player_hurdle.png')
+        self.player_falldown = load_image('STEEPLE_PLAYER/player_falldown.png')
+        self.player_win = load_image('STEEPLE_PLAYER/player_win.png')
+        self.player_lose = load_image('STEEPLE_PLAYER/player_lose.png')
+        self.player_x, self.player_y, self.player_state = 0, 325, 0
 
     def handle_events(self, e):
         pass
@@ -52,10 +69,12 @@ class Steeplechase:
         # grass
         self.bottom_grass.clip_draw(self.bottom_grass_x, 0, 80, 24, SCREENX // 2, 153, SCREENX, 116)
         self.top_grass.clip_draw(self.top_grass_x, 0, 80, 8, SCREENX // 2, 310, SCREENX, 40)
+
         # ai_track
         self.track.clip_draw(self.ai_track_x, 0, SCREENX, 130, SCREENX / 2, 275, SCREENX, 130)
         for i in range(11):
             self.hurdle.clip_draw(0, 0, 70, 130, self.ai_huddle_x[i], 275, 70, 130)
+
         # player track
         self.track.clip_draw(self.player_track_x, 0, SCREENX, 130, SCREENX / 2, 80, SCREENX, 130)
         for i in range(11):
@@ -63,3 +82,8 @@ class Steeplechase:
                 self.hurdle.clip_draw(0, 0, 70, 130, self.player_huddle_x[i], 80, 70, 130)
             elif self.hurdle_state[i] == 1:
                 self.hurdle_falldown.clip_draw(0, 0, 127, 130, self.player_huddle_x[i], 127, 130)
+
+        # ai_player
+
+
+        # player
