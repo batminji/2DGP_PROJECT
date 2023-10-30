@@ -82,7 +82,7 @@ class Marathon:
             if self.ai_x >= 330:
                 self.ai_state, self.ai_frame = 1, 0
         elif self.ai_state == 1:
-            delay(0.1)
+            delay(0.5)
             self.ai_frame += 1
             if self.ai_frame == 4:
                 self.ai_state, self.ai_frame = 2, 0
@@ -114,7 +114,7 @@ class Marathon:
             if self.player_x >= 330:
                 self.player_state, self.player_frame = 1, 0
         elif self.player_state == 1:
-            delay(0.1)
+            delay(0.5)
             self.player_frame += 1
             if self.player_frame == 4:
                 self.player_state, self.player_frame = 2, 0

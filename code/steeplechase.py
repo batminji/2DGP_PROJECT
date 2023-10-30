@@ -44,7 +44,7 @@ class Steeplechase:
         self.ai_hurdle = load_image('STEEPLE_AI/ai_hurdle.png')
         self.ai_win = load_image('STEEPLE_AI/ai_win.png')
         self.ai_lose = load_image('STEEPLE_AI/ai_lose.png')
-        self.ai_x, self.ai_y, self.ai_state = 0, 325, 0
+        self.ai_x, self.ai_y, self.ai_state, self.ai_frame = 0, 325, 0, 0
         # player
         self.player_walk = load_image('STEEPLE_PLAYER/player_walk.png')
         self.player_run = load_image('STEEPLE_PLAYER/player_run.png')
@@ -53,12 +53,34 @@ class Steeplechase:
         self.player_falldown = load_image('STEEPLE_PLAYER/player_falldown.png')
         self.player_win = load_image('STEEPLE_PLAYER/player_win.png')
         self.player_lose = load_image('STEEPLE_PLAYER/player_lose.png')
-        self.player_x, self.player_y, self.player_state = 0, 325, 0
+        self.player_x, self.player_y, self.player_state, self.player_frame = 0, 325, 0, 0
 
     def handle_events(self, e):
         pass
     def update(self):
-        pass
+        # background
+        if self.ai_state == 2 or self.ai_state == 3 or self.player_state == 2 or self.player_state == 3:
+            if self.player_track_x <= 2371:
+                self.bottom_grass_x = (self.bottom_grass_x + 2) % 177
+                self.top_grass_x = (self.top_grass_x + 2) % 80
+                self.crowd_x = (self.crowd_x + 2) % 250
+                self.sky_x = (self.sky_x + 2) % 1915
+
+        # ai player
+        if self.ai_state == 0:
+            self.ai_frame = (self.ai_frame + 1) % 9
+            self.ai_x += 10
+            if self.ai_x >= 270:
+                self.ai_state, self.ai_frame = 1, 0
+        elif self.ai_state == 1:
+            delay(0.5)
+            self.ai_frame += 1
+            if self.ai_frame == 4:
+                self.ai_state, self.ai_frame = 2, 0
+        elif self.ai_state == 2:
+            pass
+
+
     def draw(self):
         # sky
         self.sky.clip_draw(self.sky_x, 0, SCREENX, 287, SCREENX / 2, 845, SCREENX, 400)
@@ -84,6 +106,19 @@ class Steeplechase:
                 self.hurdle_falldown.clip_draw(0, 0, 127, 130, self.player_huddle_x[i], 127, 130)
 
         # ai_player
-
+        if self.ai_state == 0: # 걷기
+            self.ai_walk.clip_draw(self.ai_frame * 50, 0, 50, 100, self.ai_x, self.ai_y, 75, 150)
+        elif self.ai_state == 1: # 준비
+            self.ai_ready.clip_draw(self.ai_frame * 96, 0, 96, 96, self.ai_x, self.ai_y, 150, 150)
+        elif self.ai_state == 2: # 달리기
+            self.ai_run.clip_draw(self.ai_frame * 93, 0, 93, 96, self.ai_x, self.ai_y, 150, 150)
+        elif self.ai_state == 3: # 점프하기
+            pass
+        elif self.ai_state == 4: # 넘어지기
+            pass
+        elif self.ai_state == 5: # 이김
+            pass
+        elif self.ai_state == 6: # 짐
+            pass
 
         # player
