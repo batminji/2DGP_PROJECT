@@ -45,6 +45,8 @@ class Steeplechase:
         self.ai_win = load_image('STEEPLE_AI/ai_win.png')
         self.ai_lose = load_image('STEEPLE_AI/ai_lose.png')
         self.ai_x, self.ai_y, self.ai_state, self.ai_frame = 0, 325, 0, 0
+        self.ai_goal_line = load_image('resource/goal_line_1.png')
+        self.ai_goal_line_x = 3200
         # player
         self.player_walk = load_image('STEEPLE_PLAYER/player_walk.png')
         self.player_run = load_image('STEEPLE_PLAYER/player_run.png')
@@ -54,6 +56,8 @@ class Steeplechase:
         self.player_win = load_image('STEEPLE_PLAYER/player_win.png')
         self.player_lose = load_image('STEEPLE_PLAYER/player_lose.png')
         self.player_x, self.player_y, self.player_state, self.player_frame = 0, 325, 0, 0
+        self.player_goal_line = load_image('resource/goal_line_1.png')
+        self.player_goal_line_x = 3200
 
     def handle_events(self, e):
         pass
@@ -89,10 +93,18 @@ class Steeplechase:
                 if self.ai_hurdle_x[0] <= 0:
                     self.ai_hurdle_x.pop(0)
                 self.ai_track_x += 20
-            else:
+                self.ai_goal_line_x -= 20
+            else: # track 움직이지 않을 때
                 if self.ai_x + 100 >= self.ai_hurdle_x[1] and not (self.ai_x > self.ai_hurdle_x[1]):
                     self.ai_state, self.ai_frame = 3, 0
-                self.ai_x += 20
+                if self.ai_x >= self.ai_goal_line_x - 40 and self.ai_x <= self.ai_goal_line_x + 40:  # 기록 측정 하기
+                    self.ai_x += 20
+                    self.ai_goal_line = load_image('resource/goal_line_2.png')
+                elif self.ai_x >= 1600:  # 기록 비교 후 승리 판정
+                    self.ai_frame = 0
+                    self.ai_state = 6
+                else:
+                    self.ai_x += 20
         elif self.ai_state == 3: # 점프하기
             if self.ai_track_x <= 2371:
                 for i in range (len(self.ai_hurdle_x)):
@@ -122,6 +134,10 @@ class Steeplechase:
                 case 5:
                     self.ai_y -= 30
                     self.ai_state, self.ai_frame = 2, 0
+        elif self.ai_state == 5:
+            self.ai_frame = (self.ai_frame + 1 ) % 2
+        elif self.ai_state == 6:
+            self.ai_frame = (self.ai_frame + 1 ) % 2
 
     def draw(self):
         # sky
@@ -138,6 +154,7 @@ class Steeplechase:
         self.track.clip_draw(self.ai_track_x, 0, SCREENX, 130, SCREENX / 2, 275, SCREENX, 130)
         for i in range(len(self.ai_hurdle_x)):
             self.hurdle.clip_draw(0, 0, 70, 130, self.ai_hurdle_x[i], 275, 70, 130)
+        self.ai_goal_line.clip_draw(0, 0, 80, 120, self.ai_goal_line_x, 275, 80, 130)
 
         # player track
         self.track.clip_draw(self.player_track_x, 0, SCREENX, 130, SCREENX / 2, 80, SCREENX, 130)
@@ -156,11 +173,9 @@ class Steeplechase:
             self.ai_run.clip_draw(self.ai_frame * 93, 0, 93, 96, self.ai_x, self.ai_y, 150, 150)
         elif self.ai_state == 3: # 점프하기
             self.ai_hurdle.clip_draw(self.ai_frame * 78, 0, 78, 96, self.ai_x, self.ai_y, 125, 150)
-        elif self.ai_state == 4: # 넘어지기
-            pass
         elif self.ai_state == 5: # 이김
-            pass
+            self.ai_win.clip_draw(self.ai_frame * 72, 0, 72, 96, self.ai_x, self.ai_y, 150, 150)
         elif self.ai_state == 6: # 짐
-            pass
+            self.ai_lose.clip_draw(self.ai_frame * 48, 0, 48, 96, self.ai_x, self.ai_y, 75, 150)
 
         # player
