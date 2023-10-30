@@ -203,9 +203,13 @@ class Steeplechase:
                 case 5:
                     self.player_y -= 30
                     self.player_state, self.player_frame = 2, 0
-        elif self.player_state == 5:
+        elif self.player_state == 4: # 넘어짐
+            self.player_frame += 1
+            if self.player_frame == 8:
+                self.player_state, self.player_frame = 2, 0
+        elif self.player_state == 5: # 이김
             self.player_frame = (self.player_frame + 1 ) % 2
-        elif self.player_state == 6:
+        elif self.player_state == 6: # 짐
             self.player_frame = (self.player_frame + 1 ) % 2
 
     def draw(self):
