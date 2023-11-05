@@ -1,4 +1,6 @@
 from pico2d import *
+import game_world
+
 
 SCREENX, SCREENY = 1915, 1015
 
@@ -66,6 +68,7 @@ class Marathon:
                         self.player_state = 3
                     else:
                         self.player_x += 40
+
 
     def update(self):
         # background

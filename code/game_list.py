@@ -3,6 +3,7 @@ import game_world
 from marathon import Marathon
 from vault import Vault
 from steeplechase import Steeplechase
+from javelin_throw import JavelinThrow
 
 SCREENX, SCREENY = 1915, 1015
 
@@ -43,6 +44,9 @@ class Game_List:
                 steeplechase = Steeplechase()
                 game_world.add_object(steeplechase, 0)
             elif self.frame == 3:
+                game_world.clear()
+                javelinthrow = JavelinThrow()
+                game_world.add_object(javelinthrow, 0)
                 pass
             elif self.frame == 4:
                 pass

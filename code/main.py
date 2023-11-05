@@ -19,6 +19,10 @@ def handle_events():
             running = False
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             running = False
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_DELETE:
+            game_world.clear()
+            game_list = Game_List()
+            game_world.add_object(game_list, 0)
         else:
             game_world.handle_events(event)
 
