@@ -12,6 +12,9 @@ SCREENX, SCREENY = 1915, 1015
 
 class Marathon:
     def __init__(self):
+        # sky
+        self.sky = load_image('resource/sky.png')
+        self.sky_x = 0
         # track
         self.track = load_image('resource/marathon_track.png')
         self.track1_x, self.track2_x = 0, 0
@@ -44,9 +47,6 @@ class Marathon:
         self.player_x = 0
         self.player_frame = 0
         self.player_state = 0
-
-        self.sky = load_image('resource/sky.png')
-        self.sky_x = 0
 
     def handle_events(self, e):
         if e.type == SDL_KEYDOWN and e.key == SDLK_SPACE:
