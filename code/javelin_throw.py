@@ -19,6 +19,11 @@ class JavelinThrow:
         self.player_state = 0
         # stick
 
+        # crowd
+        self.crowd = load_image('resource/crowd_500x15.png')
+        self.crowd_x = 0
+        self.blue_bar2 = load_image('resource/blue_bar2_500x6.png')
+
     def handle_events(self, e):
         pass
 
