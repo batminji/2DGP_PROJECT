@@ -23,6 +23,11 @@ class JavelinThrow:
         self.crowd = load_image('resource/crowd_500x15.png')
         self.crowd_x = 0
         self.blue_bar2 = load_image('resource/blue_bar2_500x6.png')
+        self.blue_bar = load_image('resource/blue_bar3.png')
+        # track
+        self.run_track = load_image('resource/throw_run_track.png')
+        self.track = load_image('resource/throw_track.png')
+
 
     def handle_events(self, e):
         pass
