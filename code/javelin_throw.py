@@ -27,6 +27,10 @@ class JavelinThrow:
         # track
         self.run_track = load_image('resource/throw_run_track.png')
         self.track = load_image('resource/throw_track.png')
+        self.run_track_x, self.track_x = 0, 0
+        # sky
+        self.sky = load_image('resource/sky.png')
+        self.sky_x = 0
 
 
     def handle_events(self, e):
@@ -35,4 +39,11 @@ class JavelinThrow:
     def update(self):
         pass
     def draw(self):
-        pass
+        # sky
+        self.sky.clip_draw(self.sky_x, 0, SCREENX, 287, SCREENX / 2, 845, SCREENX, 400)
+        # crowd
+        self.blue_bar.clip_draw(0, 0, 1921, 249, SCREENX // 2, 405, SCREENX, 250)
+        self.crowd.clip_draw(self.crowd_x, 0, 250, 15, SCREENX // 2, 580, SCREENX, 100)
+        self.blue_bar2.clip_draw(0, 0, 500, 6, SCREENX // 2, 655, SCREENX, 50)
+        # track
+        self.run_track.clip_draw(0, 0, 1916, 250, SCREENX // 2, 140, SCREENX, 280)
