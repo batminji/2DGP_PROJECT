@@ -63,77 +63,25 @@ class Steeplechase:
         pass
     def update(self):
         # background
-        if self.ai_state == 2 or self.ai_state == 3 or self.player_state == 2 or self.player_state == 3:
-            if self.ai_track_x <= 2371:
-                self.bottom_grass_x = (self.bottom_grass_x + 1) % 177
-                self.top_grass_x = (self.top_grass_x + 1) % 80
-                self.crowd_x = (self.crowd_x + 1) % 250
-                self.sky_x = (self.sky_x + 1) % 1915
+        self.background_move()
 
         # ai player
         if self.ai_state == 0:
-            self.ai_frame = (self.ai_frame + 1) % 9
-            self.ai_x += 10
-            if self.ai_x >= 270:
-                self.ai_state, self.ai_frame = 1, 0
+            self.ai_walk_move()
         elif self.ai_state == 1:
-            delay(0.5)
-            self.ai_frame += 1
-            if self.ai_frame == 4:
-                self.ai_state, self.ai_frame = 2, 0
+            self.ai_ready_move()
         elif self.ai_state == 2: # 달리기
             self.ai_frame = (self.ai_frame + 1) % 6
-
             if self.ai_track_x <= 2371:
+                self.ai_track_move()
                 if self.ai_x + 100 >= self.ai_hurdle_x[0] and not (self.ai_x > self.ai_hurdle_x[0]):
                     self.ai_state, self.ai_frame = 3, 0
-
-                for i in range (len(self.ai_hurdle_x)):
-                    self.ai_hurdle_x[i] -= 20
-                if self.ai_hurdle_x[0] <= 0:
-                    self.ai_hurdle_x.pop(0)
-                self.ai_track_x += 20
-                self.ai_goal_line_x -= 20
             else: # track 움직이지 않을 때
-                if self.ai_x + 100 >= self.ai_hurdle_x[1] and not (self.ai_x > self.ai_hurdle_x[1]):
-                    self.ai_state, self.ai_frame = 3, 0
-                if self.ai_x >= self.ai_goal_line_x - 40 and self.ai_x <= self.ai_goal_line_x + 40:  # 기록 측정 하기
-                    self.ai_x += 20
-                    self.ai_goal_line = load_image('resource/goal_line_2.png')
-                elif self.ai_x >= 1600:  # 기록 비교 후 승리 판정
-                    self.ai_frame = 0
-                    self.ai_state = 6
-                else:
-                    self.ai_x += 20
+                self.ai_track_move_fix()
         elif self.ai_state == 3: # 점프하기
-            if self.ai_track_x <= 2371:
-                for i in range (len(self.ai_hurdle_x)):
-                    self.ai_hurdle_x[i] -= 20
-                if self.ai_hurdle_x[0] <= 0:
-                    self.ai_hurdle_x.pop(0)
-                self.ai_track_x += 20
-            else:
-                self.ai_x += 20
+            self.ai_hurdle_delete()
 
-            match self.ai_frame:
-                case 0:
-                    self.ai_y += 30
-                    self.ai_frame += 1
-                case 1:
-                    self.ai_y += 30
-                    self.ai_frame += 1
-                case 2:
-                    self.ai_y += 30
-                    self.ai_frame += 1
-                case 3:
-                    self.ai_y -= 30
-                    self.ai_frame += 1
-                case 4:
-                    self.ai_y -= 30
-                    self.ai_frame += 1
-                case 5:
-                    self.ai_y -= 30
-                    self.ai_state, self.ai_frame = 2, 0
+            self.ai_hurdle_jump_frame()
         elif self.ai_state == 5:
             self.ai_frame = (self.ai_frame + 1 ) % 2
         elif self.ai_state == 6:
@@ -141,15 +89,9 @@ class Steeplechase:
 
         # player
         if self.player_state == 0:
-            self.player_frame = (self.player_frame + 1) % 9
-            self.player_x += 10
-            if self.player_x >= 270:
-                self.player_state, self.player_frame = 1, 0
+            self.player_walk_move()
         elif self.player_state == 1:
-            delay(0.5)
-            self.player_frame += 1
-            if self.player_frame == 4:
-                self.player_state, self.player_frame = 2, 0
+            self.player_ready_move()
         elif self.player_state == 2: # 달리기
             self.player_frame = (self.player_frame + 1) % 6
 
@@ -211,6 +153,89 @@ class Steeplechase:
             self.player_frame = (self.player_frame + 1 ) % 2
         elif self.player_state == 6: # 짐
             self.player_frame = (self.player_frame + 1 ) % 2
+
+    def player_ready_move(self):
+        delay(0.5)
+        self.player_frame += 1
+        if self.player_frame == 4:
+            self.player_state, self.player_frame = 2, 0
+
+    def player_walk_move(self):
+        self.player_frame = (self.player_frame + 1) % 9
+        self.player_x += 10
+        if self.player_x >= 270:
+            self.player_state, self.player_frame = 1, 0
+
+    def ai_hurdle_jump_frame(self):
+        match self.ai_frame:
+            case 0:
+                self.ai_y += 30
+                self.ai_frame += 1
+            case 1:
+                self.ai_y += 30
+                self.ai_frame += 1
+            case 2:
+                self.ai_y += 30
+                self.ai_frame += 1
+            case 3:
+                self.ai_y -= 30
+                self.ai_frame += 1
+            case 4:
+                self.ai_y -= 30
+                self.ai_frame += 1
+            case 5:
+                self.ai_y -= 30
+                self.ai_state, self.ai_frame = 2, 0
+
+    def ai_hurdle_delete(self):
+        if self.ai_track_x <= 2371:
+            for i in range(len(self.ai_hurdle_x)):
+                self.ai_hurdle_x[i] -= 20
+            if self.ai_hurdle_x[0] <= 0:
+                self.ai_hurdle_x.pop(0)
+            self.ai_track_x += 20
+        else:
+            self.ai_x += 20
+
+    def ai_track_move_fix(self):
+        if self.ai_x + 100 >= self.ai_hurdle_x[1] and not (self.ai_x > self.ai_hurdle_x[1]):
+            self.ai_state, self.ai_frame = 3, 0
+        if self.ai_x >= self.ai_goal_line_x - 40 and self.ai_x <= self.ai_goal_line_x + 40:  # 기록 측정 하기
+            self.ai_x += 20
+            self.ai_goal_line = load_image('resource/goal_line_2.png')
+        elif self.ai_x >= 1600:  # 기록 비교 후 승리 판정
+            self.ai_frame = 0
+            self.ai_state = 6
+        else:
+            self.ai_x += 20
+
+    def ai_track_move(self):
+        self.ai_track_x += 20
+        self.ai_goal_line_x -= 20
+        for i in range(len(self.ai_hurdle_x)):
+            self.ai_hurdle_x[i] -= 20
+        if self.ai_hurdle_x[0] <= 0:
+            self.ai_hurdle_x.pop(0)
+
+    def ai_ready_move(self):
+        delay(0.5)
+        self.ai_frame += 1
+        if self.ai_frame == 4:
+            self.ai_state, self.ai_frame = 2, 0
+
+    def ai_walk_move(self):
+        self.ai_frame = (self.ai_frame + 1) % 9
+        self.ai_x += 10
+        if self.ai_x >= 270:
+            self.ai_state, self.ai_frame = 1, 0
+
+    def background_move(self):
+        if self.ai_state == 2 or self.ai_state == 3 or self.player_state == 2 or self.player_state == 3:
+            if self.ai_track_x <= 2371:
+                self.bottom_grass_x = (self.bottom_grass_x + 1) % 177
+                self.top_grass_x = (self.top_grass_x + 1) % 80
+                self.crowd_x = (self.crowd_x + 1) % 250
+                self.sky_x = (self.sky_x + 1) % 1915
 
     def draw(self):
         # sky
