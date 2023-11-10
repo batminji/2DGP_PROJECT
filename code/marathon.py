@@ -73,38 +73,14 @@ class Marathon:
     def update(self):
         # background
         if self.ai_state == 2:
-            if self.track2_x < 1850:
-                self.grass1_x = (self.grass1_x + 2) % 177
-                self.grass2_x = (self.grass2_x + 2) % 80
-                self.crowd_x = (self.crowd_x + 2) % 250
-                self.sky_x = (self.sky_x + 2) % 1915
+            self.background_move()
         # ai player
         if self.ai_state == 0:
-            self.ai_frame = (self.ai_frame + 1) % 9
-            self.ai_x += 10
-            if self.ai_x >= 330:
-                self.ai_state, self.ai_frame = 1, 0
+            self.ai_walk_move()
         elif self.ai_state == 1:
-            delay(0.5)
-            self.ai_frame += 1
-            if self.ai_frame == 4:
-                self.ai_state, self.ai_frame = 2, 0
+            self.ai_ready_move()
         elif self.ai_state == 2:
-            self.ai_frame = (self.ai_frame + 1) % 6
-            if self.track2_x < 1450:
-                self.track2_x += 20
-            elif self.track2_x >= 1450 and self.track2_x < 1850:
-                self.track2_x += 20
-                self.ai_goal_line_x -= 50
-            else:
-                if self.ai_x >= 955 and self.ai_x < 1055:  # 기록 측정 하기
-                    self.ai_x += 20
-                    self.goal_line2 = load_image('resource/goal_line_2.png')
-                elif self.ai_x >= 1200:  # 기록 비교 후 승리 판정
-                    self.ai_frame = 0
-                    self.ai_state = 4
-                else:
-                    self.ai_x += 20
+            self.ai_run_move()
         elif self.ai_state == 3:  # 이김
             self.ai_frame = (self.ai_frame + 1) % 2
         elif self.ai_state == 4:  # 짐
@@ -112,21 +88,63 @@ class Marathon:
 
         # player
         if self.player_state == 0:
-            self.player_frame = (self.player_frame + 1) % 9
-            self.player_x += 10
-            if self.player_x >= 330:
-                self.player_state, self.player_frame = 1, 0
+            self.player_walk_move()
         elif self.player_state == 1:
-            delay(0.5)
-            self.player_frame += 1
-            if self.player_frame == 4:
-                self.player_state, self.player_frame = 2, 0
+            self.player_ready_move()
         elif self.player_state == 2:
             pass
         elif self.player_state == 3:
             self.player_frame = (self.player_frame + 1) % 2
         elif self.player_state == 4:
             self.player_frame = (self.player_frame + 1) % 2
+
+    def player_ready_move(self):
+        delay(0.5)
+        self.player_frame += 1
+        if self.player_frame == 4:
+            self.player_state, self.player_frame = 2, 0
+
+    def player_walk_move(self):
+        self.player_frame = (self.player_frame + 1) % 9
+        self.player_x += 10
+        if self.player_x >= 330:
+            self.player_state, self.player_frame = 1, 0
+
+    def ai_run_move(self):
+        self.ai_frame = (self.ai_frame + 1) % 6
+        if self.track2_x < 1450:
+            self.track2_x += 20
+        elif self.track2_x >= 1450 and self.track2_x < 1850:
+            self.track2_x += 20
+            self.ai_goal_line_x -= 50
+        else:
+            if self.ai_x >= 955 and self.ai_x < 1055:  # 기록 측정 하기
+                self.ai_x += 20
+                self.goal_line2 = load_image('resource/goal_line_2.png')
+            elif self.ai_x >= 1200:  # 기록 비교 후 승리 판정
+                self.ai_frame = 0
+                self.ai_state = 4
+            else:
+                self.ai_x += 20
+
+    def ai_ready_move(self):
+        delay(0.5)
+        self.ai_frame += 1
+        if self.ai_frame == 4:
+            self.ai_state, self.ai_frame = 2, 0
+
+    def ai_walk_move(self):
+        self.ai_frame = (self.ai_frame + 1) % 9
+        self.ai_x += 10
+        if self.ai_x >= 330:
+            self.ai_state, self.ai_frame = 1, 0
+
+    def background_move(self):
+        if self.track2_x < 1850:
+            self.grass1_x = (self.grass1_x + 2) % 177
+            self.grass2_x = (self.grass2_x + 2) % 80
+            self.crowd_x = (self.crowd_x + 2) % 250
+            self.sky_x = (self.sky_x + 2) % 1915
 
     def draw(self):
         # sky
