@@ -19,7 +19,7 @@ class Marathon:
         self.sky_x = 0
         # track
         self.track = load_image('resource/marathon_track.png')
-        self.track1_x, self.track2_x = 0, 0
+        self.player_track_x, self.ai_track_x = 0, 0
         self.grass1 = load_image('resource/long_grass_2257x24.png')
         self.grass2 = load_image('resource/long_grass2_160x8.png')
         self.grass1_x, self.grass2_x = 0, 0
@@ -54,10 +54,10 @@ class Marathon:
         if e.type == SDL_KEYDOWN and e.key == SDLK_SPACE:
             if self.player_state == 2:
                 self.player_frame = (self.player_frame + 1) % 6
-                if self.track1_x < 1450:
-                    self.track1_x += 40
-                elif self.track1_x >= 1450 and self.track1_x < 1850:
-                    self.track1_x += 40
+                if self.player_track_x < 1450:
+                    self.player_track_x += 40
+                elif self.player_track_x >= 1450 and self.player_track_x < 1850:
+                    self.player_track_x += 40
                     self.player_goal_line_x -= 90
                 else:
                     if self.player_x >= 955 and self.player_x < 1055:  # 기록 측정 하기
@@ -112,10 +112,10 @@ class Marathon:
 
     def ai_run_move(self):
         self.ai_frame = (self.ai_frame + 1) % 6
-        if self.track2_x < 1450:
-            self.track2_x += 20
-        elif self.track2_x >= 1450 and self.track2_x < 1850:
-            self.track2_x += 20
+        if self.ai_track_x < 1450:
+            self.ai_track_x += 20
+        elif self.ai_track_x >= 1450 and self.ai_track_x < 1850:
+            self.ai_track_x += 20
             self.ai_goal_line_x -= 50
         else:
             if self.ai_x >= 955 and self.ai_x < 1055:  # 기록 측정 하기
@@ -140,7 +140,7 @@ class Marathon:
             self.ai_state, self.ai_frame = 1, 0
 
     def background_move(self):
-        if self.track2_x < 1850:
+        if self.ai_track_x < 1850:
             self.grass1_x = (self.grass1_x + 2) % 177
             self.grass2_x = (self.grass2_x + 2) % 80
             self.crowd_x = (self.crowd_x + 2) % 250
@@ -157,8 +157,8 @@ class Marathon:
         self.grass1.clip_draw(self.grass1_x, 0, 80, 24, SCREENX // 2, 153, SCREENX, 116)
         self.grass2.clip_draw(self.grass2_x, 0, 80, 8, SCREENX // 2, 310, SCREENX, 40)
 
-        self.track.clip_draw(self.track1_x, 0, SCREENX, 80, SCREENX // 2, 55, SCREENX, 80)
-        self.track.clip_draw(self.track2_x, 0, SCREENX, 80, SCREENX // 2, 250, SCREENX, 80)
+        self.track.clip_draw(self.player_track_x, 0, SCREENX, 80, SCREENX // 2, 55, SCREENX, 80)
+        self.track.clip_draw(self.ai_track_x, 0, SCREENX, 80, SCREENX // 2, 250, SCREENX, 80)
 
         self.goal_line1.clip_draw(0, 0, 73, 132, self.player_goal_line_x, 80, 73, 130)
         self.goal_line2.clip_draw(0, 0, 73, 132, self.ai_goal_line_x, 275, 73, 130)
