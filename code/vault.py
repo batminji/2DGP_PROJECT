@@ -30,7 +30,7 @@ class Vault:
         self.player_win = load_image('VAULT_PLAYER/player_win.png')
         self.player_x, self.player_y = -50, 280
         self.player_frame = 0
-        self.player_state = 0
+        self.player_state = 'WALK'
         self.player_rad = 0
         # crowd
         self.blue_bar = load_image('resource/blue_bar_500x25.png')
@@ -54,24 +54,24 @@ class Vault:
 
     def handle_events(self, e):
         global press_a, press_s, press_d
-        if self.player_state == 3 and press_d and e.type == SDL_KEYDOWN and e.key == SDLK_a:
+        if self.player_state == 'TURN' and press_d and e.type == SDL_KEYDOWN and e.key == SDLK_a:
             self.player_rad -= 120
             press_a, press_d = press_d, press_a
-        if self.player_state == 3 and press_a and e.type == SDL_KEYDOWN and e.key == SDLK_s:
+        if self.player_state == 'TURN' and press_a and e.type == SDL_KEYDOWN and e.key == SDLK_s:
             self.player_rad -= 120
             press_a, press_s = press_s, press_a
-        if self.player_state == 3 and press_s and e.type == SDL_KEYDOWN and e.key == SDLK_d:
+        if self.player_state == 'TURN' and press_s and e.type == SDL_KEYDOWN and e.key == SDLK_d:
             self.player_rad -= 120
             press_s, press_d = press_d, press_s
 
     def update(self):
-        if self.player_state == 0:
+        if self.player_state == 'WALK':
             self.player_frame = (self.player_frame + 1) % 9
             self.player_x += 5
             if self.player_x >= 250:
-                self.player_state += 1
+                self.player_state = 'RUN'
                 self.player_frame = 0
-        elif self.player_state == 1:
+        elif self.player_state == 'RUN':
             self.player_frame = (self.player_frame + 1) % 6
             self.crowd_x = (self.crowd_x + 2) % 250
             self.sky_x = (self.sky_x + 2) % 1915
@@ -79,9 +79,9 @@ class Vault:
             self.judge_x -= 20
             self.score_x -= 20
             if self.vault_board_x <= 200:
-                self.player_state += 1
+                self.player_state = 'JUMP'
                 self.player_frame = 0
-        elif self.player_state == 2:
+        elif self.player_state == 'JUMP':
             if self.player_frame == 0:
                 self.player_x += 20
                 self.player_y += 20
@@ -102,9 +102,9 @@ class Vault:
                 self.player_y += 20
             elif self.player_frame == 4:
                 delay(0.5)
-                self.player_state += 1
+                self.player_state = 'TURN'
                 self.player_frame = 0
-        elif self.player_state == 3:
+        elif self.player_state == 'TURN':
             self.player_score = (-self.player_rad) // 360
             if self.player_x <= 1200:
                 self.player_x += 10
@@ -113,12 +113,12 @@ class Vault:
                 self.player_x += 10
                 self.player_y -= 10
                 if self.player_y <= 250:
-                    self.player_state += 1
+                    self.player_state = 'LANDING'
                     self.player_y += 50
-        elif self.player_state == 4:
+        elif self.player_state == 'LANDING':
             delay(1.5)
-            self.player_state += 1
-        elif self.player_state == 5:
+            self.player_state = 'WIN'
+        elif self.player_state == 'WIN':
             delay(0.1)
             self.player_frame = (self.player_frame + 1) % 2
             self.judge_frame = (self.judge_frame + 1) % 2
@@ -134,7 +134,7 @@ class Vault:
         self.grass.clip_draw(0, 0, 40, 40, SCREENX // 2, 230, SCREENX, 460)
         self.track.clip_draw(0, 0, 1915, 24, SCREENX // 2, 200, SCREENX, 80)
         # judgement
-        if self.player_state < 5:
+        if self.player_state != 'WIN':
             self.judge.clip_draw(0, 0, 94, 51, self.judge_x, 360, 300, 180)
         else:
             self.judge_clap.clip_draw(self.judge_frame * 94, 0, 94, 51, self.judge_x, 360, 300, 180)
@@ -146,21 +146,21 @@ class Vault:
         self.vault_jump_board1.clip_draw(0, 0, 145, 89, self.vault_board_x + 600, 260, 220, 150)
         self.vault_landing_board.clip_draw(0, 0, 572, 48, self.vault_board_x + 1400, 210, 700, 100)
         # player
-        if self.player_state == 0:  # 걸어가기
+        if self.player_state == 'WALK':  # 걸어가기
             self.player_walk.clip_draw(self.player_frame * 50, 0, 50, 100, self.player_x, self.player_y, 75, 150)
-        elif self.player_state == 1:  # 달리기
+        elif self.player_state == 'RUN':  # 달리기
             self.player_run.clip_draw(self.player_frame * 93, 0, 93, 96, self.player_x, self.player_y, 150, 150)
-        elif self.player_state == 2:  # 점프하기
+        elif self.player_state == 'JUMP':  # 점프하기
             if self.player_frame == 4:
                 self.player_jump.clip_draw(self.player_frame * 133, 0, 133, 133, self.player_x, self.player_y, 180, 180)
             elif self.player_frame == 0:
                 self.player_jump.clip_draw(self.player_frame * 133, 0, 133, 133, self.player_x, self.player_y, 140, 140)
             else:
                 self.player_jump.clip_draw(self.player_frame * 133, 0, 133, 133, self.player_x, self.player_y, 150, 150)
-        elif self.player_state == 3:  # 돌기
+        elif self.player_state == 'TURN':  # 돌기
             self.player_rotate.clip_composite_draw(0, 0, 59, 67, self.player_rad, '', self.player_x, self.player_y, 90,
                                                    90)
-        elif self.player_state == 4:
+        elif self.player_state == 'LANDING':
             self.player_finish.clip_draw(0, 0, 49, 104, self.player_x, self.player_y, 75, 150)
-        elif self.player_state == 5:
+        elif self.player_state == 'WIN':
             self.player_win.clip_draw(self.player_frame * 72, 0, 72, 96, self.player_x, self.player_y, 100, 150)
