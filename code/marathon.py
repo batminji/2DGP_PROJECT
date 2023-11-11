@@ -39,7 +39,7 @@ class Marathon:
         self.ai_win = load_image('AI/ai_win.png')
         self.ai_x = 0
         self.ai_frame = 0
-        self.ai_state = 0
+        self.ai_state = 'WALK'
         # player
         self.player_walk = load_image('PLAYER/player_walk.png')
         self.player_ready = load_image('PLAYER/player_ready.png')
@@ -48,7 +48,7 @@ class Marathon:
         self.player_win = load_image('PLAYER/player_win.png')
         self.player_x = 0
         self.player_frame = 0
-        self.player_state = 0
+        self.player_state = 'WALK'
 
     def handle_events(self, e):
         if e.type == SDL_KEYDOWN and e.key == SDLK_SPACE:
@@ -72,43 +72,43 @@ class Marathon:
 
     def update(self):
         # background
-        if self.ai_state == 2:
+        if self.ai_state == 'RUN':
             self.background_move()
         # ai player
-        if self.ai_state == 0:
+        if self.ai_state == 'WALK':
             self.ai_walk_move()
-        elif self.ai_state == 1:
+        elif self.ai_state == 'READY':
             self.ai_ready_move()
-        elif self.ai_state == 2:
+        elif self.ai_state == 'RUN':
             self.ai_run_move()
-        elif self.ai_state == 3:  # 이김
+        elif self.ai_state == 'WIN':  # 이김
             self.ai_frame = (self.ai_frame + 1) % 2
-        elif self.ai_state == 4:  # 짐
+        elif self.ai_state == 'LOSE':  # 짐
             self.ai_frame = (self.ai_frame + 1) % 2
 
         # player
-        if self.player_state == 0:
+        if self.player_state == 'WALK':
             self.player_walk_move()
-        elif self.player_state == 1:
+        elif self.player_state == 'READY':
             self.player_ready_move()
-        elif self.player_state == 2:
+        elif self.player_state == 'RUN':
             pass
-        elif self.player_state == 3:
+        elif self.player_state == 'WIN':
             self.player_frame = (self.player_frame + 1) % 2
-        elif self.player_state == 4:
+        elif self.player_state == 'LOSE':
             self.player_frame = (self.player_frame + 1) % 2
 
     def player_ready_move(self):
         delay(0.5)
         self.player_frame += 1
         if self.player_frame == 4:
-            self.player_state, self.player_frame = 2, 0
+            self.player_state, self.player_frame = 'RUN', 0
 
     def player_walk_move(self):
         self.player_frame = (self.player_frame + 1) % 9
         self.player_x += 10
         if self.player_x >= 330:
-            self.player_state, self.player_frame = 1, 0
+            self.player_state, self.player_frame = 'READY', 0
 
     def ai_run_move(self):
         self.ai_frame = (self.ai_frame + 1) % 6
@@ -123,7 +123,7 @@ class Marathon:
                 self.goal_line2 = load_image('resource/goal_line_2.png')
             elif self.ai_x >= 1200:  # 기록 비교 후 승리 판정
                 self.ai_frame = 0
-                self.ai_state = 4
+                self.ai_state = 'LOSE'
             else:
                 self.ai_x += 20
 
@@ -131,13 +131,13 @@ class Marathon:
         delay(0.5)
         self.ai_frame += 1
         if self.ai_frame == 4:
-            self.ai_state, self.ai_frame = 2, 0
+            self.ai_state, self.ai_frame = 'RUN', 0
 
     def ai_walk_move(self):
         self.ai_frame = (self.ai_frame + 1) % 9
         self.ai_x += 10
         if self.ai_x >= 330:
-            self.ai_state, self.ai_frame = 1, 0
+            self.ai_state, self.ai_frame = 'READY', 0
 
     def background_move(self):
         if self.ai_track_x < 1850:
@@ -164,27 +164,27 @@ class Marathon:
         self.goal_line2.clip_draw(0, 0, 73, 132, self.ai_goal_line_x, 275, 73, 130)
 
         # ai player
-        if self.ai_state == 0:
+        if self.ai_state == 'WALK':
             self.ai_walk.clip_draw(self.ai_frame * 50, 0, 50, 100, self.ai_x, 325, 75, 150)
-        elif self.ai_state == 1:
+        elif self.ai_state == 'READY':
             self.ai_ready.clip_draw(self.ai_frame * 96, 0, 96, 96, self.ai_x, 325, 150, 150)
-        elif self.ai_state == 2:
+        elif self.ai_state == 'RUN':
             self.ai_run.clip_draw(self.ai_frame * 93, 0, 93, 96, self.ai_x, 325, 150, 150)
-        elif self.ai_state == 3:
+        elif self.ai_state == 'WIN':
             self.ai_win.clip_draw(self.ai_frame * 72, 0, 72, 96, self.ai_x, 325, 100, 150)
-        elif self.ai_state == 4:
+        elif self.ai_state == 'LOSE':
             self.ai_lose.clip_draw(self.ai_frame * 48, 0, 48, 96, self.ai_x, 325, 75, 150)
 
         # player
-        if self.player_state == 0:
+        if self.player_state == 'WALK':
             self.player_walk.clip_draw(self.player_frame * 50, 0, 50, 100, self.player_x, 125, 75, 150)
-        elif self.player_state == 1:
+        elif self.player_state == 'READY':
             self.player_ready.clip_draw(self.player_frame * 96, 0, 96, 96, self.player_x, 125, 150, 150)
-        elif self.player_state == 2:
+        elif self.player_state == 'RUN':
             self.player_run.clip_draw(self.player_frame * 93, 0, 93, 96, self.player_x, 125, 150, 150)
-        elif self.player_state == 3:
+        elif self.player_state == 'WIN':
             self.player_win.clip_draw(self.player_frame * 72, 0, 72, 96, self.player_x, 125, 100, 150)
-        elif self.player_state == 4:
+        elif self.player_state == 'LOSE':
             self.player_lose.clip_draw(self.player_frame * 48, 0, 48, 96, self.player_x, 125, 75, 150)
 
 
