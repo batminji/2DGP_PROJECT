@@ -16,7 +16,7 @@ class JavelinThrow:
         self.player_run = load_image('THROW_PLAYER/player_javelin_run.png')
         self.player_throw1 = load_image('THROW_PLAYER/player_throw_1.png')
         self.player_throw2 = load_image('THROW_PLAYER/player_throw_2.png')
-        self.player_state = 0
+        self.player_state, self.player_x , self.player_frame = 0, -50, 0
         # stick
 
         # crowd
@@ -37,6 +37,14 @@ class JavelinThrow:
         pass
 
     def update(self):
+        if self.player_state == 0 :
+            self.player_x += 5
+            self.player_frame = (self.player_frame + 1) % 9
+            if self.player_x >= 500:
+                self.player_state += 1
+                self.player_frame = 0
+            pass
+
         pass
     def draw(self):
         # sky
@@ -47,3 +55,6 @@ class JavelinThrow:
         self.blue_bar2.clip_draw(0, 0, 500, 6, SCREENX // 2, 655, SCREENX, 50)
         # track
         self.run_track.clip_draw(0, 0, 1916, 250, SCREENX // 2, 140, SCREENX, 280)
+        # player
+        if self.player_state == 0:
+            self.player_walk.clip_draw(self.player_frame * 50, 0, 50, 100, self.player_x, 350, 75, 150)
