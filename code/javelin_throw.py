@@ -41,11 +41,16 @@ class JavelinThrow:
             self.player_walk_move()
         elif self.player_state == 'RUN':
             self.player_run_move()
+        elif self.player_state == 'THROW_READY':
+            delay(1.0)
+            self.player_state = 'THROW'
+        elif self.player_state == 'THROW':
+            pass
 
     def player_run_move(self):
         self.player_frame = (self.player_frame + 1) % 9
         self.track_x -= 10
-        if (self.player_x >= self.track_x - (SCREENX / 2.0) - 100):
+        if (self.player_x >= self.track_x - (SCREENX / 2.0) - 50):
             self.player_state = 'THROW_READY'
             self.player_frame = 0
 
@@ -71,3 +76,7 @@ class JavelinThrow:
             self.player_walk.clip_draw(self.player_frame * 50, 0, 50, 100, self.player_x, 350, 75, 150)
         elif self.player_state == 'RUN':
             self.player_run.clip_draw(self.player_frame * 96, 0, 96, 96, self.player_x, 350, 150, 150)
+        elif self.player_state == 'THROW_READY':
+            self.player_throw1.clip_draw(0, 0, 96, 96, self.player_x, 350, 150, 150)
+        elif self.player_state == 'THROW':
+            self.player_throw2.clip_draw(0, 0, 96, 96, self.player_x, 350, 150, 150)
