@@ -49,10 +49,9 @@ class Marathon:
         self.player_x = 0
         self.player_frame = 0
         self.player_state = 'WALK'
-
     def handle_events(self, e):
         if e.type == SDL_KEYDOWN and e.key == SDLK_SPACE:
-            if self.player_state == 2:
+            if self.player_state == 'RUN':
                 self.player_frame = (self.player_frame + 1) % 6
                 if self.player_track_x < 1450:
                     self.player_track_x += 40
@@ -65,7 +64,7 @@ class Marathon:
                         self.goal_line1 = load_image('resource/goal_line_2.png')
                     elif self.player_x >= 1200:  # 기록 비교 후 승리 판정
                         self.player_frame = 0
-                        self.player_state = 3
+                        self.player_state = 'WIN'
                     else:
                         self.player_x += 40
 
