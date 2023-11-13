@@ -18,7 +18,8 @@ class JavelinThrow:
         self.player_throw2 = load_image('THROW_PLAYER/player_throw_2.png')
         self.player_state, self.player_x , self.player_frame = 'WALK', -50, 0
         # stick
-
+        self.stick = load_image('resource/stick.png')
+        self.stick_x, self.stick_y = 0, 0
         # crowd
         self.crowd = load_image('resource/crowd_500x15.png')
         self.crowd_x = 0
@@ -31,10 +32,14 @@ class JavelinThrow:
         # sky
         self.sky = load_image('resource/sky.png')
         self.sky_x = 0
-
+        # arrow
+        self.arrow = load_image('resource/arrow.png')
+        self.arrow_x, self.arrow_y, self.angle = 0, 0, 0
 
     def handle_events(self, e):
-        pass
+        if self.player_state == 'THROW_READY' and e.type == SDL_KEYDOWN and e.key == SDLK_SPACE:
+
+            pass
 
     def update(self):
         if self.player_state == 'WALK':
