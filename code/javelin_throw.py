@@ -1,4 +1,5 @@
 from pico2d import *
+import math
 
 SCREENX, SCREENY = 1915, 1015
 
@@ -35,6 +36,7 @@ class JavelinThrow:
         # arrow
         self.arrow = load_image('resource/arrow.png')
         self.arrow_x, self.arrow_y, self.angle = 0, 0, 0
+        self.angle_dir = True
 
     def handle_events(self, e):
         if self.player_state == 'THROW_READY' and e.type == SDL_KEYDOWN and e.key == SDLK_SPACE:
@@ -47,7 +49,16 @@ class JavelinThrow:
         elif self.player_state == 'RUN':
             self.player_run_move()
         elif self.player_state == 'THROW_READY':
-            pass
+            self.arrow_x = self.player_x + 100 * math.cos(self.angle)
+            self.arrow_y = 400 + 100 * math.sin(self.angle)
+            if self.angle_dir:
+                self.angle -= 0.1
+                if(self.angle <= -1):
+                    self.angle_dir = False
+            else:
+                self.angle += 0.1
+                if(self.angle >= 1):
+                    self.angle_dir = True
         elif self.player_state == 'THROW':
             pass
 
@@ -78,11 +89,12 @@ class JavelinThrow:
         self.run_track.clip_draw(0, 0, 1916, 250, SCREENX // 2, 140, SCREENX, 280)
         self.track.clip_draw(0, 0, 1916, 250, self.track_x, 140, SCREENX, 280)
 
-        # stick
+        # stick & arrow
         if self.player_state == 'RUN':
             self.stick.clip_draw(0, 0, 100, 3, self.stick_x, self.stick_y, 300, 9)
         elif self.player_state == 'THROW_READY':
             self.stick.clip_composite_draw(0, 0, 100, 3, 60, '', self.stick_x, self.stick_y, 300, 9)
+            self.arrow.clip_composite_draw(0, 0, 120, 120, self.angle, '', self.arrow_x, self.arrow_y, 50, 50)
         # player
         if self.player_state == 'WALK':
             self.player_walk.clip_draw(self.player_frame * 50, 0, 50, 100, self.player_x, 350, 75, 150)
