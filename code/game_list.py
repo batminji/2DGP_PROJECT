@@ -4,6 +4,7 @@ from marathon import Marathon
 from vault import Vault
 from steeplechase import Steeplechase
 from javelin_throw import JavelinThrow
+from long_jump import LongJump
 
 SCREENX, SCREENY = 1915, 1015
 
@@ -49,4 +50,6 @@ class Game_List:
                 game_world.add_object(javelinthrow, 0)
                 pass
             elif self.frame == 4:
-                pass
+                game_world.clear()
+                longjump = LongJump()
+                game_world.add_object(longjump, 0)

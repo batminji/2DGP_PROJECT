@@ -37,11 +37,11 @@ class JavelinThrow:
         self.arrow = load_image('resource/arrow.png')
         self.arrow_x, self.arrow_y, self.angle = 0, 0, 0
         self.angle_dir = True
+        self.angle_cnt = 0
 
     def handle_events(self, e):
         if self.player_state == 'THROW_READY' and e.type == SDL_KEYDOWN and e.key == SDLK_SPACE:
-
-            pass
+            self.player_state = 'THROW'
 
     def update(self):
         if self.player_state == 'WALK':
@@ -49,18 +49,21 @@ class JavelinThrow:
         elif self.player_state == 'RUN':
             self.player_run_move()
         elif self.player_state == 'THROW_READY':
-            self.arrow_x = self.player_x + 100 * math.cos(self.angle)
-            self.arrow_y = 400 + 100 * math.sin(self.angle)
-            if self.angle_dir:
-                self.angle -= 0.1
-                if(self.angle <= -1):
-                    self.angle_dir = False
-            else:
-                self.angle += 0.1
-                if(self.angle >= 1):
-                    self.angle_dir = True
+            self.arrow_angle_move()
         elif self.player_state == 'THROW':
             pass
+
+    def arrow_angle_move(self):
+        self.arrow_x = self.player_x + 100 * math.cos(self.angle)
+        self.arrow_y = 400 + 100 * math.sin(self.angle)
+        if self.angle_dir:
+            self.angle -= 0.1
+            if (self.angle <= -1):
+                self.angle_dir = False
+        else:
+            self.angle += 0.1
+            if (self.angle >= 1):
+                self.angle_dir = True
 
     def player_run_move(self):
         self.player_frame = (self.player_frame + 1) % 9
