@@ -16,7 +16,13 @@ class LongJump:
         self.player_state = 'WALK'
         self.player_frame, self.player_x, self.player_y = 0, 0, 0
 
-
+        # track
+        self.track = load_image('JUMP_PLAYER/long_jump_track.png')
+        self.track_bar = load_image('JUMP_PLAYER/long_jump_track_bar.png')
+        self.big_grass = load_image('JUMP_PLAYER/big_grass.png')
+        self.small_grass = load_image('JUMP_PLAYER/small_grass.png')
+        self.sand = load_image('JUMP_PLAYER/long_jump_sand.png')
+        self.track_x, self.grass_x = 0, 0
 
         pass
 
