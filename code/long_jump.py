@@ -24,7 +24,10 @@ class LongJump:
         self.big_grass = load_image('JUMP_PLAYER/big_grass.png')
         self.small_grass = load_image('JUMP_PLAYER/small_grass.png')
         self.sand = load_image('JUMP_PLAYER/long_jump_sand.png')
-        self.track_x, self.grass_x, self.sand_x = 1333, 0, 3800
+        self.record = load_image('JUMP_PLAYER/record.png')
+        self.sand_mark = load_image('JUMP_PLAYER/landing_mark.png')
+        self.sand_mark_x, self.sand_mark_y = 0, 0
+        self.track_x, self.grass_x, self.sand_x, self.record_x = 1333, 0, 3800, 3000
 
         # crowd
         self.blue_bar = load_image('resource/blue_bar_500x25.png')
@@ -81,6 +84,8 @@ class LongJump:
             self.player_frame += 1
             self.player_state = 'LANDING'
             self.player_frame_cnt = 0
+            self.sand_mark_x = self.player_x
+            self.sand_mark_y = self.player_y - 75
         if self.player_frame < 4:
             self.player_frame_cnt += 1
             if self.player_frame_cnt == 5:
@@ -104,6 +109,7 @@ class LongJump:
         if self.track_x >= -900:
             self.track_x -= 20
             self.sand_x -= 20
+            self.record_x -= 20
         elif self.track_x <= -900:
             self.player_x += 20
         if self.player_x <= 200:
@@ -138,6 +144,13 @@ class LongJump:
 
         # sand
         self.sand.clip_draw(0, 0, 450, 38, self.sand_x, 150, 2700, 228)
+
+        # sand mark
+        if self.player_state == 'LANDING' or self.player_state == 'WIN':
+            self.sand_mark.clip_draw(0, 0, 51, 24, self.sand_mark_x, self.sand_mark_y, 51, 24)
+
+        # record
+        self.record.clip_draw(0, 0, 152, 10, self.record_x, 300, 760, 50)
 
         # arrow
         if self.player_state == 'READY':
