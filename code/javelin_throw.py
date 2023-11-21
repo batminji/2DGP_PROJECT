@@ -52,31 +52,36 @@ class JavelinThrow:
             self.arrow_angle_move()
             print(self.angle)
         elif self.player_state == 'THROW':
-            if self.angle > 0.0:
-                if self.stick_x <= 1700:
-                    self.stick_x += 10
-                self.stick_y += 10
-                self.angle -= 0.01
-                if self.player_x >= -75:
-                    self.player_x -= 10
-                if self.track_x >= SCREENX // 2:
-                    self.track_x -= 10
-            elif self.angle < 0.0:
-                self.stick_y -= 5
-                if self.angle > -1.0 :
-                    self.angle -= 0.01
-                if self.player_x >= -75:
-                    self.player_x -= 10
-                if self.track_x >= SCREENX // 2:
-                    self.track_x -= 10
+            self.stick_angle_move()
+            self.stick_landing_judgement()
 
-            not_radian_angle = self.angle * 180 // PI
-            if not_radian_angle < 0.0:
-                not_radian_angle = -not_radian_angle
-            stick_bottom = self.stick_y - math.sin(not_radian_angle) * 150
-            if stick_bottom <= 280:
-                self.player_state = 'DONE'
-                self.stick_y = 280 + math.sin(not_radian_angle) * 150
+    def stick_landing_judgement(self):
+        not_radian_angle = self.angle * 180 // PI
+        if not_radian_angle < 0.0:
+            not_radian_angle = -not_radian_angle
+        stick_bottom = self.stick_y - math.sin(not_radian_angle) * 150
+        if stick_bottom <= 280:
+            self.player_state = 'DONE'
+            self.stick_y = 280 + math.sin(not_radian_angle) * 150
+
+    def stick_angle_move(self):
+        if self.angle > 0.0:
+            if self.stick_x <= 1700:
+                self.stick_x += 10
+            self.stick_y += 10
+            self.angle -= 0.01
+            if self.player_x >= -75:
+                self.player_x -= 10
+            if self.track_x >= SCREENX // 2:
+                self.track_x -= 10
+        elif self.angle < 0.0:
+            self.stick_y -= 5
+            if self.angle > -1.0:
+                self.angle -= 0.01
+            if self.player_x >= -75:
+                self.player_x -= 10
+            if self.track_x >= SCREENX // 2:
+                self.track_x -= 10
 
     def arrow_angle_move(self):
         self.arrow_x = self.player_x + 100 * math.cos(self.angle)
