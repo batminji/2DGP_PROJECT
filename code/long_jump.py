@@ -49,9 +49,6 @@ class LongJump:
             print(not_radian_angle)
 
     def update(self):
-        # background
-
-        # player
         if self.player_state == 'WALK':
             self.player_walk_move()
         elif self.player_state == 'RUN':
@@ -60,15 +57,30 @@ class LongJump:
             self.arrow_move()
         elif self.player_state == 'JUMP':
             self.player_jump_move()
+        elif self.player_state == 'LANDING':
+            self.player_frame_cnt += 1
+            if self.player_frame_cnt >= 10:
+                self.player_state = 'WIN'
+                self.player_frame = 0
+                self.player_x += 100
+                self.player_frame_cnt = 0
+        elif self.player_state == 'WIN':
+            self.player_frame_cnt += 1
+            if self.player_frame_cnt > 5:
+                self.player_frame = (self.player_frame + 1) % 2
+                self.player_frame_cnt = 0
+
+
 
     def player_jump_move(self):
         not_radian_angle = self.angle * 180 // PI
-        self.player_x = self.player_x + 20
-        self.player_y = self.player_y + 20 * math.sin(not_radian_angle) - 0.05 * (self.player_time ** 2)
+        self.player_x = self.player_x + 5 * max(abs(math.cos(not_radian_angle)), 0.1) * self.player_time
+        self.player_y = self.player_y + 10 * math.sin(not_radian_angle) - 0.05 * (self.player_time ** 2)
         self.player_time += 1
         if self.player_y <= 225:
             self.player_frame += 1
             self.player_state = 'LANDING'
+            self.player_frame_cnt = 0
         if self.player_frame < 4:
             self.player_frame_cnt += 1
             if self.player_frame_cnt == 5:
@@ -80,11 +92,11 @@ class LongJump:
         self.arrow_y = self.player_y + 100 * math.sin(self.angle)
         if self.angle_dir:
             self.angle -= 0.1
-            if (self.angle <= -1):
+            if (self.angle <= -0.5):
                 self.angle_dir = False
         else:
             self.angle += 0.1
-            if (self.angle >= 1):
+            if (self.angle >= 1.0):
                 self.angle_dir = True
 
     def player_run_move(self):
@@ -142,3 +154,5 @@ class LongJump:
             self.player_longjump.clip_draw(self.player_frame * 66, 0, 66, 96, self.player_x, self.player_y, 100, 150)
         elif self.player_state == 'LANDING':
             self.player_longjump.clip_draw(self.player_frame * 66, 0, 66, 96, self.player_x, self.player_y, 100, 150)
+        elif self.player_state == 'WIN':
+            self.player_win.clip_draw(self.player_frame * 72, 0, 72, 96, self.player_x, self.player_y, 112, 150)
