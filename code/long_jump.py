@@ -24,6 +24,16 @@ class LongJump:
         self.sand = load_image('JUMP_PLAYER/long_jump_sand.png')
         self.track_x, self.grass_x = 0, 0
 
+        # crowd
+        self.blue_bar = load_image('resource/blue_bar_500x25.png')
+        self.crowd = load_image('resource/crowd_500x15.png')
+        self.crowd_x = 0
+        self.blue_bar2 = load_image('resource/blue_bar2_500x6.png')
+
+        # sky
+        self.sky = load_image('resource/sky.png')
+        self.sky_x = 0
+
         pass
 
     def handle_events(self, e):
@@ -33,4 +43,18 @@ class LongJump:
         pass
 
     def draw(self):
-        pass
+        # sky
+        self.sky.clip_draw(self.sky_x, 0, SCREENX, 287, SCREENX / 2, 880, SCREENX, 300)
+        # crowd
+        self.blue_bar.clip_draw(0, 0, 500, 25, SCREENX // 2, 500, SCREENX, 200)
+        self.crowd.clip_draw(self.crowd_x, 0, 250, 15, SCREENX // 2, 650, SCREENX, 100)
+        self.blue_bar2.clip_draw(0, 0, 500, 6, SCREENX // 2, 725, SCREENX, 50)
+
+        # background
+        self.big_grass.clip_draw(self.grass_x, 0, 1000, 99, SCREENX // 2, 50, SCREENX, 100)
+        self.big_grass.clip_draw(self.grass_x, 0, 1000, 99, SCREENX // 2, 250, SCREENX, 100)
+        self.track_bar.clip_draw(0, 0, 1915, 80, SCREENX // 2, 325, SCREENX, 50)
+        self.small_grass.clip_draw(0, 0, 1915, 80, SCREENX // 2, 375, SCREENX, 50)
+
+        # track
+        self.track.clip_draw(self.track_x, 0, 1915, 80, SCREENX // 2 , 150, SCREENX, 100)
