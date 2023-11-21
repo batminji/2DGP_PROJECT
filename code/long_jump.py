@@ -2,7 +2,8 @@ from pico2d import *
 import math
 
 SCREENX, SCREENY = 1915, 1015
-
+PI = 3.141592
+Velocity = 8
 
 # state
 
@@ -14,7 +15,8 @@ class LongJump:
         self.player_longjump = load_image('JUMP_PLAYER/player_longjump.png')
         self.player_win = load_image('JUMP_PLAYER/player_win.png')
         self.player_state = 'WALK'
-        self.player_frame, self.player_x, self.player_y = 0, -75, 225
+        self.player_frame, self.player_x, self.player_y, self.player_time = 0, -75, 225, 0
+        self.player_frame_cnt = 0
 
         # track
         self.track = load_image('JUMP_PLAYER/long_jump_track.png')
@@ -22,7 +24,7 @@ class LongJump:
         self.big_grass = load_image('JUMP_PLAYER/big_grass.png')
         self.small_grass = load_image('JUMP_PLAYER/small_grass.png')
         self.sand = load_image('JUMP_PLAYER/long_jump_sand.png')
-        self.track_x, self.grass_x = 0, 0
+        self.track_x, self.grass_x, self.sand_x = 1333, 0, 3800
 
         # crowd
         self.blue_bar = load_image('resource/blue_bar_500x25.png')
@@ -34,10 +36,17 @@ class LongJump:
         self.sky = load_image('resource/sky.png')
         self.sky_x = 0
 
-        pass
+        # arrow
+        self.arrow = load_image('resource/arrow.png')
+        self.arrow_x, self.arrow_y, self.angle = 0, 0, 0
+        self.angle_dir = True
+        self.angle_cnt = 0
 
     def handle_events(self, e):
-        pass
+        if self.player_state == 'READY' and e.type == SDL_KEYDOWN and e.key == SDLK_SPACE:
+            self.player_state = 'JUMP'
+            not_radian_angle = self.angle * 180 // PI
+            print(not_radian_angle)
 
     def update(self):
         # background
@@ -45,11 +54,56 @@ class LongJump:
         # player
         if self.player_state == 'WALK':
             self.player_walk_move()
+        elif self.player_state == 'RUN':
+            self.player_run_move()
+        elif self.player_state == 'READY':
+            self.arrow_move()
+        elif self.player_state == 'JUMP':
+            self.player_jump_move()
+
+    def player_jump_move(self):
+        not_radian_angle = self.angle * 180 // PI
+        self.player_x = self.player_x + 20
+        self.player_y = self.player_y + 20 * math.sin(not_radian_angle) - 0.05 * (self.player_time ** 2)
+        self.player_time += 1
+        if self.player_y <= 225:
+            self.player_frame += 1
+            self.player_state = 'LANDING'
+        if self.player_frame < 4:
+            self.player_frame_cnt += 1
+            if self.player_frame_cnt == 5:
+                self.player_frame += 1
+                self.player_frame_cnt = 0
+
+    def arrow_move(self):
+        self.arrow_x = self.player_x + 100 * math.cos(self.angle)
+        self.arrow_y = self.player_y + 100 * math.sin(self.angle)
+        if self.angle_dir:
+            self.angle -= 0.1
+            if (self.angle <= -1):
+                self.angle_dir = False
+        else:
+            self.angle += 0.1
+            if (self.angle >= 1):
+                self.angle_dir = True
+
+    def player_run_move(self):
+        self.player_frame = (self.player_frame + 1) % 6
+        if self.track_x >= -900:
+            self.track_x -= 20
+            self.sand_x -= 20
+        elif self.track_x <= -900:
+            self.player_x += 20
+        if self.player_x <= 200:
+            self.player_x += 20
+        if self.player_x >= 250:
+            self.player_state = 'READY'
+            self.player_frame = 0
 
     def player_walk_move(self):
         self.player_frame = (self.player_frame + 1) % 9
         self.player_x += 5
-        if self.player_x >= 200:
+        if self.player_x >= 100:
             self.player_frame = 0
             self.player_state = 'RUN'
 
@@ -68,8 +122,23 @@ class LongJump:
         self.small_grass.clip_draw(0, 0, 1915, 80, SCREENX // 2, 375, SCREENX, 50)
 
         # track
-        self.track.clip_draw(self.track_x, 0, 1915, 80, SCREENX // 2 , 150, SCREENX, 100)
+        self.track.clip_draw(0, 0, 2667, 80, self.track_x , 150, 2667, 100)
+
+        # sand
+        self.sand.clip_draw(0, 0, 450, 38, self.sand_x, 150, 2700, 228)
+
+        # arrow
+        if self.player_state == 'READY':
+            self.arrow.clip_composite_draw(0, 0, 120, 120, self.angle, '', self.arrow_x, self.arrow_y, 50, 50)
 
         # player
         if self.player_state == 'WALK':
             self.player_walk.clip_draw(self.player_frame * 50, 0, 50, 100, self.player_x, self.player_y, 75, 150)
+        elif self.player_state == 'RUN':
+            self.player_run.clip_draw(self.player_frame * 93, 0, 93, 96, self.player_x, self.player_y, 150, 150)
+        elif self.player_state == 'READY':
+            self.player_longjump.clip_draw(0, 0, 66, 96, self.player_x, self.player_y, 100, 150)
+        elif self.player_state == 'JUMP':
+            self.player_longjump.clip_draw(self.player_frame * 66, 0, 66, 96, self.player_x, self.player_y, 100, 150)
+        elif self.player_state == 'LANDING':
+            self.player_longjump.clip_draw(self.player_frame * 66, 0, 66, 96, self.player_x, self.player_y, 100, 150)
