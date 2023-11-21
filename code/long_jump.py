@@ -16,6 +16,8 @@ class LongJump:
         self.player_state = 'WALK'
         self.player_frame, self.player_x, self.player_y = 0, 0, 0
 
+
+
         pass
 
     def handle_events(self, e):
