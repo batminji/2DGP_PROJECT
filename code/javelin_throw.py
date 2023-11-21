@@ -2,7 +2,7 @@ from pico2d import *
 import math
 
 SCREENX, SCREENY = 1915, 1015
-
+PI = 3.141592
 
 # state
 # 0 : 걷기
@@ -50,8 +50,33 @@ class JavelinThrow:
             self.player_run_move()
         elif self.player_state == 'THROW_READY':
             self.arrow_angle_move()
+            print(self.angle)
         elif self.player_state == 'THROW':
-            pass
+            if self.angle > 0.0:
+                if self.stick_x <= 1700:
+                    self.stick_x += 10
+                self.stick_y += 10
+                self.angle -= 0.01
+                if self.player_x >= -75:
+                    self.player_x -= 10
+                if self.track_x >= SCREENX // 2:
+                    self.track_x -= 10
+            elif self.angle < 0.0:
+                self.stick_y -= 5
+                if self.angle > -1.0 :
+                    self.angle -= 0.01
+                if self.player_x >= -75:
+                    self.player_x -= 10
+                if self.track_x >= SCREENX // 2:
+                    self.track_x -= 10
+
+            not_radian_angle = self.angle * 180 // PI
+            if not_radian_angle < 0.0:
+                not_radian_angle = -not_radian_angle
+            stick_bottom = self.stick_y - math.sin(not_radian_angle) * 150
+            if stick_bottom <= 280:
+                self.player_state = 'DONE'
+                self.stick_y = 280 + math.sin(not_radian_angle) * 150
 
     def arrow_angle_move(self):
         self.arrow_x = self.player_x + 100 * math.cos(self.angle)
@@ -98,6 +123,12 @@ class JavelinThrow:
         elif self.player_state == 'THROW_READY':
             self.stick.clip_composite_draw(0, 0, 100, 3, 60, '', self.stick_x, self.stick_y, 300, 9)
             self.arrow.clip_composite_draw(0, 0, 120, 120, self.angle, '', self.arrow_x, self.arrow_y, 50, 50)
+        elif self.player_state == 'THROW':
+            self.stick.clip_composite_draw(0, 0, 100, 3, self.angle, '', self.stick_x, self.stick_y, 300, 9)
+        elif self.player_state == 'DONE':
+            self.stick.clip_composite_draw(0, 0, 100, 3, self.angle, '', self.stick_x, self.stick_y, 300, 9)
+
+
         # player
         if self.player_state == 'WALK':
             self.player_walk.clip_draw(self.player_frame * 50, 0, 50, 100, self.player_x, 350, 75, 150)
