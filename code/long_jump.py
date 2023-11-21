@@ -14,7 +14,7 @@ class LongJump:
         self.player_longjump = load_image('JUMP_PLAYER/player_longjump.png')
         self.player_win = load_image('JUMP_PLAYER/player_win.png')
         self.player_state = 'WALK'
-        self.player_frame, self.player_x, self.player_y = 0, 0, 0
+        self.player_frame, self.player_x, self.player_y = 0, -75, 225
 
         # track
         self.track = load_image('JUMP_PLAYER/long_jump_track.png')
@@ -40,7 +40,18 @@ class LongJump:
         pass
 
     def update(self):
-        pass
+        # background
+
+        # player
+        if self.player_state == 'WALK':
+            self.player_walk_move()
+
+    def player_walk_move(self):
+        self.player_frame = (self.player_frame + 1) % 9
+        self.player_x += 5
+        if self.player_x >= 200:
+            self.player_frame = 0
+            self.player_state = 'RUN'
 
     def draw(self):
         # sky
@@ -58,3 +69,7 @@ class LongJump:
 
         # track
         self.track.clip_draw(self.track_x, 0, 1915, 80, SCREENX // 2 , 150, SCREENX, 100)
+
+        # player
+        if self.player_state == 'WALK':
+            self.player_walk.clip_draw(self.player_frame * 50, 0, 50, 100, self.player_x, self.player_y, 75, 150)
