@@ -61,19 +61,20 @@ class LongJump:
         elif self.player_state == 'JUMP':
             self.player_jump_move()
         elif self.player_state == 'LANDING':
-            self.player_frame_cnt += 1
-            if self.player_frame_cnt >= 10:
-                self.player_state = 'WIN'
-                self.player_frame = 0
-                self.player_x += 100
-                self.player_frame_cnt = 0
+            self.player_landing_move()
         elif self.player_state == 'WIN':
             self.player_frame_cnt += 1
             if self.player_frame_cnt > 5:
                 self.player_frame = (self.player_frame + 1) % 2
                 self.player_frame_cnt = 0
 
-
+    def player_landing_move(self):
+        self.player_frame_cnt += 1
+        if self.player_frame_cnt >= 10:
+            self.player_state = 'WIN'
+            self.player_frame = 0
+            self.player_x += 100
+            self.player_frame_cnt = 0
 
     def player_jump_move(self):
         not_radian_angle = self.angle * 180 // PI
