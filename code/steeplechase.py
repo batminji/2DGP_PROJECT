@@ -14,6 +14,9 @@ SCREENX, SCREENY = 1915, 1015
 
 class Steeplechase:
     def __init__(self):
+        # score
+        self.score_board = load_image('resource/score_board.png')
+        self.score_font = load_font('Font/DungGeunMo.ttf', 60)
         # track
         self.track = load_image('resource/steeplechase_track.png')
         self.ai_track_x, self.player_track_x = 0, 0
@@ -47,6 +50,7 @@ class Steeplechase:
         self.ai_x, self.ai_y, self.ai_state, self.ai_frame = 0, 325, 'WALK', 0
         self.ai_goal_line = load_image('resource/goal_line_1.png')
         self.ai_goal_line_x = 3200
+        self.ai_score = 0
         # player
         self.player_walk = load_image('STEEPLE_PLAYER/player_walk.png')
         self.player_run = load_image('STEEPLE_PLAYER/player_run.png')
@@ -58,6 +62,7 @@ class Steeplechase:
         self.player_x, self.player_y, self.player_state, self.player_frame = 0, 125, 'WALK', 0
         self.player_goal_line = load_image('resource/goal_line_1.png')
         self.player_goal_line_x = 3200
+        self.player_score = 0
 
     def handle_events(self, e):
         if e.type == SDL_KEYDOWN and e.key == SDLK_SPACE:
@@ -91,11 +96,11 @@ class Steeplechase:
                 self.ai_track_move()
                 if self.ai_x + 100 >= self.ai_hurdle_x[0] and not (self.ai_x > self.ai_hurdle_x[0]):
                     self.ai_state, self.ai_frame = 'JUMP', 0
+                    self.ai_score += 150
             else: # track 움직이지 않을 때
                 self.ai_track_move_fix()
         elif self.ai_state == 'JUMP': # 점프하기
             self.ai_hurdle_delete()
-
             self.ai_hurdle_jump_frame()
         elif self.ai_state == 'WIN':
             self.ai_frame = (self.ai_frame + 1 ) % 2
@@ -113,7 +118,7 @@ class Steeplechase:
                 if self.collide_player_hurdle() and self.hurdle_state[0] == 0:
                     self.player_state, self.player_frame = 'FALLDOWN', 0
                     self.hurdle_state[0] = 1
-
+                    self.player_score -= 150
                 for i in range (len(self.player_hurdle_x)):
                     self.player_hurdle_x[i] -= 20
                 if self.player_hurdle_x[0] <= 0:
@@ -131,6 +136,7 @@ class Steeplechase:
                 else:
                     self.player_x += 20
         elif self.player_state == 'JUMP': # 점프하기
+            self.player_score += 150
             if self.player_track_x <= 2371:
                 for i in range (len(self.player_hurdle_x)):
                     self.player_hurdle_x[i] -= 20
@@ -306,3 +312,10 @@ class Steeplechase:
             self.player_win.clip_draw(self.player_frame * 72, 0, 72, 96, self.player_x, self.player_y, 125, 150)
         elif self.player_state == 'LOSE': # 짐
             self.player_lose.clip_draw(self.player_frame * 48, 0, 48, 96, self.player_x, self.player_y, 75, 150)
+
+        # score
+        self.score_board.clip_draw(0, 0, 135, 135, 1650, 850, 500, 300)
+        self.score_font.draw(1450, 950, "CPU", (255, 255, 255))
+        self.score_font.draw(1450, 900, '%d POINT' % self.ai_score, (255, 255, 255))
+        self.score_font.draw(1450, 800, "PLAYER", (255, 255, 255))
+        self.score_font.draw(1450, 750, '%d POINT' % self.player_score, (255, 255, 255))
