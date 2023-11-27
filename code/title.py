@@ -1,7 +1,7 @@
 from pico2d import *
 import random
 import game_world
-from game_list import Game_List
+from make_id import MakeID
 
 SCREENX, SCREENY = 1915, 1015
 
@@ -43,5 +43,5 @@ class Title:
         if e.type == SDL_KEYDOWN and e.key == SDLK_RETURN:
             game_world.clear()
             self.bgm.stop()
-            game_list = Game_List()
-            game_world.add_object(game_list, 0)
+            makeid = MakeID()
+            game_world.add_object(makeid, 0)
