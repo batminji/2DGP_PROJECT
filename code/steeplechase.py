@@ -335,4 +335,4 @@ class Steeplechase:
         self.score_font.draw(1450, 750, '%d POINT' % self.player_score, (255, 255, 255))
 
     def get_ID(self):
-        pass
+        return self.ID

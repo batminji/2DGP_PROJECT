@@ -71,4 +71,4 @@ class Game_List():
                 game_world.add_object(longjump, 0)
 
     def get_ID(self):
-        pass
+        return self.ID

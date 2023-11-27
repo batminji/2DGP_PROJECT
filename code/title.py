@@ -47,4 +47,4 @@ class Title:
             game_world.add_object(makeid, 0)
 
     def get_ID(self):
-        pass
+        return None

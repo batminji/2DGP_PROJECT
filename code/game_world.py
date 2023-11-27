@@ -2,6 +2,7 @@ from pico2d import *
 
 objects = [[], [], []]
 
+global PLAYER_ID
 
 def add_object(o, depth=0):
     objects[depth].append(o)
@@ -42,6 +43,8 @@ def handle_events(e):
             o.handle_events(e)
 
 def get_ID():
+    global PLAYER_ID
     for layer in objects:
         for o in layer:
-            o.get_ID()
+            PLAYER_ID = o.get_ID()
+    return PLAYER_ID

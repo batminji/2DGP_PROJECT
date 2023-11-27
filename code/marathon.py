@@ -228,4 +228,4 @@ class Marathon:
         self.score_font.draw(1450, 750, '%.3f sec'%self.player_timer, (255, 255, 255))
 
     def get_ID(self):
-        pass
+        return self.ID

@@ -191,4 +191,4 @@ class LongJump:
         self.score_font.draw(1450, 850, "%.3f meter"%self.score_meter, (255, 255, 255))
 
     def get_ID(self):
-        pass
+        return self.ID

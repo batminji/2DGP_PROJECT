@@ -48,4 +48,4 @@ class GameOver:
         pass
 
     def get_ID(self):
-        pass
+        return None

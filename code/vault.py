@@ -180,4 +180,4 @@ class Vault:
         self.score_font.draw(1450, 850, f'{self.player_score * 100} POINT', (255, 255, 255))
 
     def get_ID(self):
-        pass
+        return self.ID

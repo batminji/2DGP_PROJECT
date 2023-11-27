@@ -7,6 +7,7 @@ from game_list import Game_List
 SCREENX, SCREENY = 1915, 1015
 GAME_NUM = 0
 
+global PLAYER_ID
 
 def handle_events():
     global running
@@ -19,7 +20,7 @@ def handle_events():
             running = False
         elif event.type == SDL_KEYDOWN and event.key == SDLK_DELETE:
             game_world.clear()
-            game_list = Game_List()
+            game_list = Game_List(PLAYER_ID)
             game_world.add_object(game_list, 0)
         else:
             game_world.handle_events(event)
@@ -54,7 +55,7 @@ while running:
     handle_events()
     update_world()
     render_world()
-    get_ID
+    PLAYER_ID = get_ID()
     delay(0.05)
 
 close_canvas()
