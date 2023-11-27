@@ -17,6 +17,7 @@ class Game_List:
         self.star = load_image('resource/star55x383.png')
         self.star_frame = 0
         self.game_over_button = load_image('resource/game_over_button.png')
+        self.game_select_sound = load_music('MUSIC/game_select_sound.wav')
 
     def update(self):
         self.star_frame = (self.star_frame + 1) % 4
@@ -38,9 +39,11 @@ class Game_List:
 
         # 키보드
         if e.type == SDL_KEYDOWN and e.key == SDLK_UP:
+            self.game_select_sound.play()
             if self.frame > 0:
                 self.frame -= 1
         elif e.type == SDL_KEYDOWN and e.key == SDLK_DOWN:
+            self.game_select_sound.play()
             if self.frame < 4:
                 self.frame += 1
         elif e.type == SDL_KEYDOWN and e.key == SDLK_RETURN:
