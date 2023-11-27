@@ -13,6 +13,9 @@ SCREENX, SCREENY = 1915, 1015
 
 class Vault:
     def __init__(self):
+        # score
+        self.score_board = load_image('resource/score_board.png')
+        self.score_font = load_font('Font/DungGeunMo.ttf', 60)
         # track
         self.grass = load_image('resource/ground_40x40.png')
         self.track = load_image('resource/vault_track.png')
@@ -164,3 +167,8 @@ class Vault:
             self.player_finish.clip_draw(0, 0, 49, 104, self.player_x, self.player_y, 75, 150)
         elif self.player_state == 'WIN':
             self.player_win.clip_draw(self.player_frame * 72, 0, 72, 96, self.player_x, self.player_y, 100, 150)
+
+        # score
+        self.score_board.clip_draw(0, 0, 135, 135, 1650, 850, 500, 300)
+        self.score_font.draw(1450, 950, "PLAYER", (255, 255, 255))
+        self.score_font.draw(1450, 850, f'{self.player_score * 100} POINT', (255, 255, 255))
