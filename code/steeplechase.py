@@ -69,6 +69,7 @@ class Steeplechase:
             if self.player_state == 'RUN':
                 self.player_state = 'JUMP'
                 self.player_frame = 0
+                self.player_score += 150
 
     def collide_player_hurdle(self):
         left_a, bottom_a, right_a, top_a = self.player_x, self.player_y - 75, self.player_x + 20, self.player_y + 75
@@ -136,7 +137,6 @@ class Steeplechase:
                 else:
                     self.player_x += 20
         elif self.player_state == 'JUMP': # 점프하기
-            self.player_score += 150
             if self.player_track_x <= 2371:
                 for i in range (len(self.player_hurdle_x)):
                     self.player_hurdle_x[i] -= 20
@@ -220,6 +220,7 @@ class Steeplechase:
     def ai_track_move_fix(self):
         if self.ai_x + 100 >= self.ai_hurdle_x[1] and not (self.ai_x > self.ai_hurdle_x[1]):
             self.ai_state, self.ai_frame = 'JUMP', 0
+            self.ai_score += 150
         if self.ai_x >= self.ai_goal_line_x - 40 and self.ai_x <= self.ai_goal_line_x + 40:  # 기록 측정 하기
             self.ai_x += 20
             self.ai_goal_line = load_image('resource/goal_line_2.png')

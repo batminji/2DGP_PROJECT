@@ -12,6 +12,10 @@ PI = 3.141592
 
 class JavelinThrow:
     def __init__(self):
+        # score
+        self.score_board = load_image('resource/score_board.png')
+        self.score_font = load_font('Font/DungGeunMo.ttf', 60)
+        self.score = 0
         # player
         self.player_walk = load_image('THROW_PLAYER/player_walk.png')
         self.player_run = load_image('THROW_PLAYER/player_javelin_run.png')
@@ -52,8 +56,13 @@ class JavelinThrow:
             self.arrow_angle_move()
             print(self.angle)
         elif self.player_state == 'THROW':
+            self.score += 10
             self.stick_angle_move()
             self.stick_landing_judgement()
+
+        if self.player_state == 'RUN' or self.player_state == 'THROW':
+            self.crowd_x = (self.crowd_x + 1) % 250
+            self.sky_x = (self.sky_x + 2) % 1915
 
     def stick_landing_judgement(self):
         not_radian_angle = self.angle * 180 // PI
@@ -143,3 +152,8 @@ class JavelinThrow:
             self.player_throw1.clip_draw(0, 0, 96, 96, self.player_x, 350, 150, 150)
         elif self.player_state == 'THROW':
             self.player_throw2.clip_draw(0, 0, 96, 96, self.player_x, 350, 150, 150)
+
+        # score
+        self.score_board.clip_draw(0, 0, 135, 135, 1650, 850, 500, 300)
+        self.score_font.draw(1450, 950, "PLAYER", (255, 255, 255))
+        self.score_font.draw(1450, 850, f'{self.score} meter', (255, 255, 255))
