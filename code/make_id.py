@@ -14,6 +14,8 @@ class MakeID:
         self.box_x, self.box_y, self.box_size = 1000, 460, 100
         self.ID = ''
         self.color_R, self.color_G, self.color_B = 255, 255, 255
+        self.bgm = load_music('MUSIC/select_name_bgm.mp3')
+        self.bgm.repeat_play()
         pass
 
     def update(self):
