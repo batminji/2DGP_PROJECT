@@ -1,5 +1,6 @@
 from pico2d import *
 import game_world
+import time
 
 
 SCREENX, SCREENY = 1915, 1015
@@ -14,6 +15,9 @@ SCREENX, SCREENY = 1915, 1015
 
 class Marathon:
     def __init__(self):
+        # score
+        self.score_board = load_image('resource/score_board.png')
+        self.score_font = load_font('Font/DungGeunMo.ttf', 60)
         # sky
         self.sky = load_image('resource/sky.png')
         self.sky_x = 0
@@ -50,6 +54,9 @@ class Marathon:
         self.player_frame = 0
         self.player_state = 'WALK'
         self.player_speed = 40
+        # timer
+        self.ai_timer, self.player_timer = 0, 0
+        self.start_time, self.end_time = 0, 0
     def handle_events(self, e):
         if e.type == SDL_KEYDOWN and e.key == SDLK_SPACE:
             if self.player_state == 'RUN':
@@ -58,6 +65,7 @@ class Marathon:
 
 
     def update(self):
+        self.end_time = get_time()
         # background
         if self.ai_state == 'RUN':
             self.background_move()
@@ -67,6 +75,7 @@ class Marathon:
         elif self.ai_state == 'READY':
             self.ai_ready_move()
         elif self.ai_state == 'RUN':
+            self.ai_timer = self.end_time - self.start_time
             self.ai_run_move()
         elif self.ai_state == 'WIN':  # 이김
             self.ai_frame = (self.ai_frame + 1) % 2
@@ -79,6 +88,7 @@ class Marathon:
         elif self.player_state == 'READY':
             self.player_ready_move()
         elif self.player_state == 'RUN':
+            self.player_timer = self.end_time - self.start_time
             self.player_frame = (self.player_frame + 1) % 6
             if self.player_track_x < 1450:
                 self.player_track_x += self.player_speed
@@ -126,7 +136,7 @@ class Marathon:
             if self.ai_x >= 955 and self.ai_x < 1055:  # 기록 측정 하기
                 self.ai_x += 20
                 self.goal_line2 = load_image('resource/goal_line_2.png')
-            elif self.ai_x >= 1200:  # 기록 비교 후 승리 판정
+            elif self.ai_x >= self.ai_goal_line_x:  # 기록 비교 후 승리 판정
                 self.ai_frame = 0
                 self.ai_state = 'LOSE'
             else:
@@ -137,6 +147,7 @@ class Marathon:
         self.ai_frame += 1
         if self.ai_frame == 4:
             self.ai_state, self.ai_frame = 'RUN', 0
+            self.start_time = get_time()
 
     def ai_walk_move(self):
         self.ai_frame = (self.ai_frame + 1) % 9
@@ -192,4 +203,9 @@ class Marathon:
         elif self.player_state == 'LOSE':
             self.player_lose.clip_draw(self.player_frame * 48, 0, 48, 96, self.player_x, 125, 75, 150)
 
-
+        # score
+        self.score_board.clip_draw(0, 0, 135, 135, 1650, 850, 500, 300)
+        self.score_font.draw(1450, 950, "CPU", (255, 255, 255))
+        self.score_font.draw(1450, 900, '%.3f sec'%self.ai_timer, (255, 255, 255))
+        self.score_font.draw(1450, 800, "PLAYER", (255, 255, 255))
+        self.score_font.draw(1450, 750, '%.3f sec'%self.player_timer, (255, 255, 255))
