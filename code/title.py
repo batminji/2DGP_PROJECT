@@ -45,3 +45,6 @@ class Title:
             self.bgm.stop()
             makeid = MakeID()
             game_world.add_object(makeid, 0)
+
+    def get_ID(self):
+        pass

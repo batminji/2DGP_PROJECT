@@ -13,7 +13,8 @@ SCREENX, SCREENY = 1915, 1015
 # 6 : 짐
 
 class Steeplechase:
-    def __init__(self):
+    def __init__(self, ID):
+        self.ID = ID
         # sound
         self.game_start_effect = load_music('MUSIC/game_start_bgm.mp3')
         self.game_start_effect.play()
@@ -332,3 +333,6 @@ class Steeplechase:
         self.score_font.draw(1450, 900, '%d POINT' % self.ai_score, (255, 255, 255))
         self.score_font.draw(1450, 800, "PLAYER", (255, 255, 255))
         self.score_font.draw(1450, 750, '%d POINT' % self.player_score, (255, 255, 255))
+
+    def get_ID(self):
+        pass

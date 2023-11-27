@@ -46,3 +46,6 @@ class GameOver:
         self.char1.clip_draw(self.frame1 * 93, 0, 93, 96, self.char1_x, 275, 186, 192)
         self.char2.clip_draw(self.frame2 * 93, 0, 93, 96, self.char2_x, 275, 186, 192)
         pass
+
+    def get_ID(self):
+        pass

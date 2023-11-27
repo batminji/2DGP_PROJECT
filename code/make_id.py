@@ -130,8 +130,11 @@ class MakeID:
             if self.select == 26:
                 self.ID += ' '
             elif self.select == 27:
-                game_list = Game_List()
+                game_list = Game_List(self.ID)
                 game_world.add_object(game_list, 0)
             else:
                 self.ID += self.alphabet[self.select]
+        pass
+
+    def get_ID(self):
         pass

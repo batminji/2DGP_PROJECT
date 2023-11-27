@@ -10,14 +10,15 @@ from gameover import GameOver
 SCREENX, SCREENY = 1915, 1015
 
 
-class Game_List:
-    def __init__(self):
+class Game_List():
+    def __init__(self, ID):
         self.frame = 0
         self.image = load_image('resource/game_list.png')
         self.star = load_image('resource/star55x383.png')
         self.star_frame = 0
         self.game_over_button = load_image('resource/game_over_button.png')
         self.game_select_sound = load_music('MUSIC/game_select_sound.wav')
+        self.ID = ID
 
     def update(self):
         self.star_frame = (self.star_frame + 1) % 4
@@ -49,22 +50,25 @@ class Game_List:
         elif e.type == SDL_KEYDOWN and e.key == SDLK_RETURN:
             if self.frame == 0:
                 game_world.clear()
-                marathon = Marathon()
+                marathon = Marathon(self.ID)
                 game_world.add_object(marathon, 0)
             elif self.frame == 1:
                 game_world.clear()
-                vault = Vault()
+                vault = Vault(self.ID)
                 game_world.add_object(vault, 0)
             elif self.frame == 2:
                 game_world.clear()
-                steeplechase = Steeplechase()
+                steeplechase = Steeplechase(self.ID)
                 game_world.add_object(steeplechase, 0)
             elif self.frame == 3:
                 game_world.clear()
-                javelinthrow = JavelinThrow()
+                javelinthrow = JavelinThrow(self.ID)
                 game_world.add_object(javelinthrow, 0)
                 pass
             elif self.frame == 4:
                 game_world.clear()
-                longjump = LongJump()
+                longjump = LongJump(self.ID)
                 game_world.add_object(longjump, 0)
+
+    def get_ID(self):
+        pass

@@ -11,7 +11,8 @@ PI = 3.141592
 # 3 : 던지기 2
 
 class JavelinThrow:
-    def __init__(self):
+    def __init__(self, ID):
+        self.ID = ID
         # sound
         self.game_start_effect = load_music('MUSIC/game_start_bgm.mp3')
         self.game_start_effect.play()
@@ -162,3 +163,6 @@ class JavelinThrow:
         self.score_board.clip_draw(0, 0, 135, 135, 1650, 850, 500, 300)
         self.score_font.draw(1450, 950, "PLAYER", (255, 255, 255))
         self.score_font.draw(1450, 850, f'{self.score} meter', (255, 255, 255))
+
+    def get_ID(self):
+        pass

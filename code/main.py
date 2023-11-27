@@ -3,8 +3,6 @@ from pico2d import *
 import game_world
 from title import Title
 from game_list import Game_List
-from marathon import Marathon
-from vault import Vault
 
 SCREENX, SCREENY = 1915, 1015
 GAME_NUM = 0
@@ -44,6 +42,11 @@ def render_world():
     update_canvas()
 
 
+def get_ID():
+    game_world.get_ID()
+    pass
+
+
 open_canvas(SCREENX, SCREENY)
 reset_world()
 
@@ -51,6 +54,7 @@ while running:
     handle_events()
     update_world()
     render_world()
+    get_ID
     delay(0.05)
 
 close_canvas()

@@ -40,3 +40,8 @@ def handle_events(e):
     for layer in objects:
         for o in layer:
             o.handle_events(e)
+
+def get_ID():
+    for layer in objects:
+        for o in layer:
+            o.get_ID()

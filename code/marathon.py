@@ -18,7 +18,8 @@ class Score:
 # 4 : 짐
 
 class Marathon:
-    def __init__(self):
+    def __init__(self, ID):
+        self.ID = ID
         # sound
         self.game_start_effect = load_music('MUSIC/game_start_bgm.mp3')
         self.game_start_effect.play()
@@ -225,3 +226,6 @@ class Marathon:
         self.score_font.draw(1450, 900, '%.3f sec'%self.ai_timer, (255, 255, 255))
         self.score_font.draw(1450, 800, "PLAYER", (255, 255, 255))
         self.score_font.draw(1450, 750, '%.3f sec'%self.player_timer, (255, 255, 255))
+
+    def get_ID(self):
+        pass
