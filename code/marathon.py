@@ -102,7 +102,10 @@ class Marathon:
                         self.goal_line1 = load_image('resource/goal_line_2.png')
                 elif self.player_x >= 1200:  # 기록 비교 후 승리 판정
                     self.player_frame = 0
-                    self.player_state = 'WIN'
+                    if self.player_timer < self.ai_timer:
+                        self.player_state = 'WIN'
+                    elif self.player_timer > self.ai_timer:
+                        self.player_state = 'LOSE'
                 else:
                     self.player_x += 40
         elif self.player_state == 'WIN':
@@ -138,7 +141,10 @@ class Marathon:
                 self.goal_line2 = load_image('resource/goal_line_2.png')
             elif self.ai_x >= self.ai_goal_line_x:  # 기록 비교 후 승리 판정
                 self.ai_frame = 0
-                self.ai_state = 'LOSE'
+                if self.ai_timer <= self.player_timer:
+                    self.ai_state = 'WIN'
+                elif self.ai_timer >= self.player_timer:
+                    self.ai_state = 'LOSE'
             else:
                 self.ai_x += 20
 
