@@ -9,6 +9,10 @@ Velocity = 8
 
 class LongJump:
     def __init__(self):
+        # score
+        self.score_board = load_image('resource/score_board.png')
+        self.score_font = load_font('Font/DungGeunMo.ttf', 60)
+        self.score_meter = 0
         # player
         self.player_walk = load_image('JUMP_PLAYER/player_walk.png')
         self.player_run = load_image('JUMP_PLAYER/player_run.png')
@@ -27,7 +31,7 @@ class LongJump:
         self.record = load_image('JUMP_PLAYER/record.png')
         self.sand_mark = load_image('JUMP_PLAYER/landing_mark.png')
         self.sand_mark_x, self.sand_mark_y = 0, 0
-        self.track_x, self.grass_x, self.sand_x, self.record_x = 1333, 0, 3800, 3000
+        self.track_x, self.grass_x, self.sand_x, self.record_x = 1333, 0, 3800, 3100
 
         # crowd
         self.blue_bar = load_image('resource/blue_bar_500x25.png')
@@ -59,6 +63,7 @@ class LongJump:
         elif self.player_state == 'READY':
             self.arrow_move()
         elif self.player_state == 'JUMP':
+            self.score_meter = (self.player_x - 250) / 100
             self.player_jump_move()
         elif self.player_state == 'LANDING':
             self.player_landing_move()
@@ -173,3 +178,8 @@ class LongJump:
             self.player_longjump.clip_draw(self.player_frame * 66, 0, 66, 96, self.player_x, self.player_y, 100, 150)
         elif self.player_state == 'WIN':
             self.player_win.clip_draw(self.player_frame * 72, 0, 72, 96, self.player_x, self.player_y, 112, 150)
+
+        # score
+        self.score_board.clip_draw(0, 0, 135, 135, 1650, 850, 500, 300)
+        self.score_font.draw(1450, 950, "PLAYER", (255, 255, 255))
+        self.score_font.draw(1450, 850, "%.3f meter"%self.score_meter, (255, 255, 255))
