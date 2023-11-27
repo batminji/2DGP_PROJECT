@@ -17,6 +17,7 @@ class Steeplechase:
         # sound
         self.game_start_effect = load_music('MUSIC/game_start_bgm.mp3')
         self.game_start_effect.play()
+        self.game_over_effect = load_music('MUSIC/game_over_bgm.mp3')
         # score
         self.score_board = load_image('resource/score_board.png')
         self.score_font = load_font('Font/DungGeunMo.ttf', 60)
@@ -134,9 +135,14 @@ class Steeplechase:
                 if self.player_x >= self.player_goal_line_x - 40 and self.player_x <= self.player_goal_line_x + 40:  # 기록 측정 하기
                     self.player_x += 20
                     self.player_goal_line = load_image('resource/goal_line_2.png')
-                elif self.player_x >= 1600:  # 기록 비교 후 승리 판정
+                elif self.player_x >= self.player_goal_line_x:  # 기록 비교 후 승리 판정
                     self.player_frame = 0
-                    self.player_state = 'WIN'
+                    if self.player_score >= self.ai_score:
+                        self.player_state = 'WIN'
+                        self.game_over_effect.play()
+                    else:
+                        self.player_state = 'LOSE'
+                        self.game_over_effect.play()
                 else:
                     self.player_x += 20
         elif self.player_state == 'JUMP': # 점프하기
@@ -227,9 +233,12 @@ class Steeplechase:
         if self.ai_x >= self.ai_goal_line_x - 40 and self.ai_x <= self.ai_goal_line_x + 40:  # 기록 측정 하기
             self.ai_x += 20
             self.ai_goal_line = load_image('resource/goal_line_2.png')
-        elif self.ai_x >= 1600:  # 기록 비교 후 승리 판정
+        elif self.ai_x >= self.ai_goal_line_x:  # 기록 비교 후 승리 판정
             self.ai_frame = 0
-            self.ai_state = 'LOSE'
+            if self.ai_score > self.player_score:
+                self.ai_state = 'WIN'
+            else:
+                self.ai_state = 'LOSE'
         else:
             self.ai_x += 20
 

@@ -22,6 +22,7 @@ class Marathon:
         # sound
         self.game_start_effect = load_music('MUSIC/game_start_bgm.mp3')
         self.game_start_effect.play()
+        self.game_over_effect = load_music('MUSIC/game_over_bgm.mp3')
         # score
         self.score_board = load_image('resource/score_board.png')
         self.score_font = load_font('Font/DungGeunMo.ttf', 60)
@@ -111,8 +112,10 @@ class Marathon:
                     self.player_frame = 0
                     if self.player_timer <= self.ai_timer:
                         self.player_state = 'WIN'
+                        self.game_over_effect.play()
                     elif self.player_timer >= self.ai_timer:
                         self.player_state = 'LOSE'
+                        self.game_over_effect.play()
                 else:
                     self.player_x += 40
         elif self.player_state == 'WIN':

@@ -12,6 +12,7 @@ class LongJump:
         # sound
         self.game_start_effect = load_music('MUSIC/game_start_bgm.mp3')
         self.game_start_effect.play()
+        self.game_over_effect = load_music('MUSIC/game_over_bgm.mp3')
         # score
         self.score_board = load_image('resource/score_board.png')
         self.score_font = load_font('Font/DungGeunMo.ttf', 60)
@@ -86,6 +87,7 @@ class LongJump:
             self.player_frame = 0
             self.player_x += 100
             self.player_frame_cnt = 0
+            self.game_over_effect.play()
 
     def player_jump_move(self):
         not_radian_angle = self.angle * 180 // PI

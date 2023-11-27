@@ -15,6 +15,7 @@ class JavelinThrow:
         # sound
         self.game_start_effect = load_music('MUSIC/game_start_bgm.mp3')
         self.game_start_effect.play()
+        self.game_over_effect = load_music('MUSIC/game_over_bgm.mp3')
         # score
         self.score_board = load_image('resource/score_board.png')
         self.score_font = load_font('Font/DungGeunMo.ttf', 60)
@@ -72,9 +73,10 @@ class JavelinThrow:
         if not_radian_angle < 0.0:
             not_radian_angle = -not_radian_angle
         stick_bottom = self.stick_y - math.sin(not_radian_angle) * 150
-        if stick_bottom <= 280:
+        if stick_bottom <= 270:
             self.player_state = 'DONE'
-            self.stick_y = 280 + math.sin(not_radian_angle) * 150
+            self.stick_y = 270 + math.sin(not_radian_angle) * 150
+            self.game_over_effect.play()
 
     def stick_angle_move(self):
         if self.angle > 0.0:

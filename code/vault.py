@@ -16,6 +16,7 @@ class Vault:
         # sound
         self.game_start_effect = load_music('MUSIC/game_start_bgm.mp3')
         self.game_start_effect.play()
+        self.game_over_effect = load_music('MUSIC/game_over_bgm.mp3')
         # score
         self.score_board = load_image('resource/score_board.png')
         self.score_font = load_font('Font/DungGeunMo.ttf', 60)
@@ -121,6 +122,7 @@ class Vault:
                 if self.player_y <= 250:
                     self.player_state = 'LANDING'
                     self.player_y += 50
+                    self.game_over_effect.play()
         elif self.player_state == 'LANDING':
             delay(1.5)
             self.player_state = 'WIN'
