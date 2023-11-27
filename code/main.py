@@ -44,7 +44,8 @@ def render_world():
 
 
 def get_ID():
-    game_world.get_ID()
+    global PLAYER_ID
+    PLAYER_ID = game_world.get_ID()
     pass
 
 
@@ -55,7 +56,7 @@ while running:
     handle_events()
     update_world()
     render_world()
-    PLAYER_ID = get_ID()
+    get_ID()
     delay(0.05)
 
 close_canvas()

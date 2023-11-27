@@ -224,7 +224,7 @@ class Marathon:
         self.score_board.clip_draw(0, 0, 135, 135, 1650, 850, 500, 300)
         self.score_font.draw(1450, 950, "CPU", (255, 255, 255))
         self.score_font.draw(1450, 900, '%.3f sec'%self.ai_timer, (255, 255, 255))
-        self.score_font.draw(1450, 800, "PLAYER", (255, 255, 255))
+        self.score_font.draw(1450, 800, f'{self.ID}', (255, 255, 255))
         self.score_font.draw(1450, 750, '%.3f sec'%self.player_timer, (255, 255, 255))
 
     def get_ID(self):

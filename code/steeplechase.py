@@ -331,7 +331,7 @@ class Steeplechase:
         self.score_board.clip_draw(0, 0, 135, 135, 1650, 850, 500, 300)
         self.score_font.draw(1450, 950, "CPU", (255, 255, 255))
         self.score_font.draw(1450, 900, '%d POINT' % self.ai_score, (255, 255, 255))
-        self.score_font.draw(1450, 800, "PLAYER", (255, 255, 255))
+        self.score_font.draw(1450, 800, f'{self.ID}', (255, 255, 255))
         self.score_font.draw(1450, 750, '%d POINT' % self.player_score, (255, 255, 255))
 
     def get_ID(self):

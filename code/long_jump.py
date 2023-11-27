@@ -187,7 +187,7 @@ class LongJump:
 
         # score
         self.score_board.clip_draw(0, 0, 135, 135, 1650, 850, 500, 300)
-        self.score_font.draw(1450, 950, "PLAYER", (255, 255, 255))
+        self.score_font.draw(1450, 950, f'{self.ID}', (255, 255, 255))
         self.score_font.draw(1450, 850, "%.3f meter"%self.score_meter, (255, 255, 255))
 
     def get_ID(self):
