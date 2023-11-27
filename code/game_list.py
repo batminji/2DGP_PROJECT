@@ -5,6 +5,7 @@ from vault import Vault
 from steeplechase import Steeplechase
 from javelin_throw import JavelinThrow
 from long_jump import LongJump
+from gameover import GameOver
 
 SCREENX, SCREENY = 1915, 1015
 
@@ -15,6 +16,7 @@ class Game_List:
         self.image = load_image('resource/game_list.png')
         self.star = load_image('resource/star55x383.png')
         self.star_frame = 0
+        self.game_over_button = load_image('resource/game_over_button.png')
 
     def update(self):
         self.star_frame = (self.star_frame + 1) % 4
@@ -23,8 +25,17 @@ class Game_List:
         self.image.clip_draw(self.frame * 723, 0, 723, 383, SCREENX // 2, SCREENY // 2, SCREENX, SCREENY)
         self.star.clip_draw(self.star_frame * 55, 0, 55, 383, 100, SCREENY // 2, 120, SCREENY)
         self.star.clip_draw(self.star_frame * 55, 0, 55, 383, 1815, SCREENY // 2, 120, SCREENY)
+        self.game_over_button.clip_draw(0, 0, 213, 200, 1700, 100, 100, 100)
 
     def handle_events(self, e):
+        # 마우스
+        if e.type == SDL_MOUSEBUTTONDOWN:
+            if(1650 <= e.x <= 1750) and (50 <= 1015 - e.y + 1 <= 150):
+                gameover = GameOver()
+                game_world.add_object(gameover, 0)
+
+
+        # 키보드
         if e.type == SDL_KEYDOWN and e.key == SDLK_UP:
             if self.frame > 0:
                 self.frame -= 1
