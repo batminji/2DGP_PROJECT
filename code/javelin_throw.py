@@ -12,6 +12,9 @@ PI = 3.141592
 
 class JavelinThrow:
     def __init__(self):
+        # sound
+        self.game_start_effect = load_music('MUSIC/game_start_bgm.mp3')
+        self.game_start_effect.play()
         # score
         self.score_board = load_image('resource/score_board.png')
         self.score_font = load_font('Font/DungGeunMo.ttf', 60)

@@ -19,6 +19,9 @@ class Score:
 
 class Marathon:
     def __init__(self):
+        # sound
+        self.game_start_effect = load_music('MUSIC/game_start_bgm.mp3')
+        self.game_start_effect.play()
         # score
         self.score_board = load_image('resource/score_board.png')
         self.score_font = load_font('Font/DungGeunMo.ttf', 60)
@@ -45,7 +48,7 @@ class Marathon:
         self.ai_run = load_image('AI/ai_run.png')
         self.ai_lose = load_image('AI/ai_lose.png')
         self.ai_win = load_image('AI/ai_win.png')
-        self.ai_x = 0
+        self.ai_x = -500
         self.ai_frame = 0
         self.ai_state = 'WALK'
         # player
@@ -54,7 +57,7 @@ class Marathon:
         self.player_run = load_image('PLAYER/player_run.png')
         self.player_lose = load_image('PLAYER/player_lose.png')
         self.player_win = load_image('PLAYER/player_win.png')
-        self.player_x = 0
+        self.player_x = -500
         self.player_frame = 0
         self.player_state = 'WALK'
         self.player_speed = 40
