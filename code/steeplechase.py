@@ -65,7 +65,17 @@ class Steeplechase:
                 self.player_state = 'JUMP'
                 self.player_frame = 0
 
-        pass
+    def collide_player_hurdle(self):
+        left_a, bottom_a, right_a, top_a = self.player_x, self.player_y - 75, self.player_x + 20, self.player_y + 75
+        left_b, bottom_b, right_b, top_b = self.player_hurdle_x[0] - 40, 15, self.player_hurdle_x[0], 145
+
+        if left_a > right_b: return False
+        if right_a < left_b: return False
+        if top_a < bottom_b: return False
+        if bottom_a > top_b: return False
+
+        return True
+
     def update(self):
         # background
         self.background_move()
@@ -99,12 +109,16 @@ class Steeplechase:
             self.player_ready_move()
         elif self.player_state == 'RUN': # 달리기
             self.player_frame = (self.player_frame + 1) % 6
-
             if self.player_track_x <= 2371:
+                if self.collide_player_hurdle() and self.hurdle_state[0] == 0:
+                    self.player_state, self.player_frame = 'FALLDOWN', 0
+                    self.hurdle_state[0] = 1
+
                 for i in range (len(self.player_hurdle_x)):
                     self.player_hurdle_x[i] -= 20
                 if self.player_hurdle_x[0] <= 0:
                     self.player_hurdle_x.pop(0)
+                    self.hurdle_state[0] = 0
                 self.player_track_x += 20
                 self.player_goal_line_x -= 20
             else: # track 움직이지 않을 때
@@ -260,7 +274,7 @@ class Steeplechase:
             if self.hurdle_state[i] == 0:
                 self.hurdle.clip_draw(0, 0, 70, 130, self.player_hurdle_x[i], 80, 70, 130)
             elif self.hurdle_state[i] == 1:
-                self.hurdle_falldown.clip_draw(0, 0, 127, 130, self.player_hurdle_x[i], 127, 130)
+                self.hurdle_falldown.clip_draw(0, 0, 127, 130, self.player_hurdle_x[i], 80, 127, 130)
         self.player_goal_line.clip_draw(0, 0, 80, 120, self.player_goal_line_x, 80, 80, 130)
 
         # ai_player
@@ -286,6 +300,8 @@ class Steeplechase:
             self.player_run.clip_draw(self.player_frame * 93, 0, 93, 96, self.player_x, self.player_y, 150, 150)
         elif self.player_state == 'JUMP': # 점프하기
             self.player_hurdle.clip_draw(self.player_frame * 78, 0, 78, 96, self.player_x, self.player_y, 125, 150)
+        elif self.player_state == 'FALLDOWN': # 넘어지기
+            self.player_falldown.clip_draw(self.player_frame * 100, 0, 100, 68, self.player_x, self.player_y, 150, 100)
         elif self.player_state == 'WIN': # 이김
             self.player_win.clip_draw(self.player_frame * 72, 0, 72, 96, self.player_x, self.player_y, 125, 150)
         elif self.player_state == 'LOSE': # 짐
