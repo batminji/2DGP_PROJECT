@@ -8,6 +8,8 @@ SCREENX, SCREENY = 1915, 1015
 
 class GameOver:
     def __init__(self):
+        self.bgm = load_music('MUSIC/over_screen_bgm.mp3')
+        self.bgm.repeat_play()
         self.background = load_image('resource/title_background.png')
         self.x, self.y = SCREENX // 2, SCREENY // 2
         self.logo = load_image('resource/title_logo.png')
