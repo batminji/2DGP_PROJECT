@@ -60,6 +60,11 @@ class Steeplechase:
         self.player_goal_line_x = 3200
 
     def handle_events(self, e):
+        if e.type == SDL_KEYDOWN and e.key == SDLK_SPACE:
+            if self.player_state == 'RUN':
+                self.player_state = 'JUMP'
+                self.player_frame = 0
+
         pass
     def update(self):
         # background
@@ -96,9 +101,6 @@ class Steeplechase:
             self.player_frame = (self.player_frame + 1) % 6
 
             if self.player_track_x <= 2371:
-                if self.player_x + 100 >= self.player_hurdle_x[0] and not (self.player_x > self.player_hurdle_x[0]):
-                    self.player_state, self.player_frame = 'JUMP', 0
-
                 for i in range (len(self.player_hurdle_x)):
                     self.player_hurdle_x[i] -= 20
                 if self.player_hurdle_x[0] <= 0:
@@ -106,8 +108,6 @@ class Steeplechase:
                 self.player_track_x += 20
                 self.player_goal_line_x -= 20
             else: # track 움직이지 않을 때
-                if self.player_x + 100 >= self.player_hurdle_x[1] and not (self.player_x > self.player_hurdle_x[1]):
-                    self.player_state, self.player_frame = 'JUMP', 0
                 if self.player_x >= self.player_goal_line_x - 40 and self.player_x <= self.player_goal_line_x + 40:  # 기록 측정 하기
                     self.player_x += 20
                     self.player_goal_line = load_image('resource/goal_line_2.png')

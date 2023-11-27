@@ -31,6 +31,7 @@ class Game_List:
         # 마우스
         if e.type == SDL_MOUSEBUTTONDOWN:
             if(1650 <= e.x <= 1750) and (50 <= 1015 - e.y + 1 <= 150):
+                game_world.clear()
                 gameover = GameOver()
                 game_world.add_object(gameover, 0)
 
