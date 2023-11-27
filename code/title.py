@@ -17,6 +17,8 @@ class Title:
         self.frame1, self.frame2 = random.randint(0, 6), random.randint(0, 6)
         self.char1_x, self.char2_x = 0, 0
         self.char1_speed, self.char2_speed = 10, 15
+        self.bgm = load_music('MUSIC/title_bgm.mp3')
+        self.bgm.repeat_play()
 
     def update(self):
         self.frame1, self.frame2 = (self.frame1 + 1) % 6, (self.frame2 + 1) % 6
@@ -40,5 +42,6 @@ class Title:
     def handle_events(self, e):
         if e.type == SDL_KEYDOWN and e.key == SDLK_RETURN:
             game_world.clear()
+            self.bgm.stop()
             game_list = Game_List()
             game_world.add_object(game_list, 0)

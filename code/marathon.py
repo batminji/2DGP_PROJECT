@@ -5,6 +5,10 @@ import time
 
 SCREENX, SCREENY = 1915, 1015
 
+class Score:
+    def __init__(self, game_mode, score):
+        self.game_mode, self.score = game_mode, score
+
 
 # state
 # 0 : 걷기
@@ -100,11 +104,11 @@ class Marathon:
                     self.player_x += self.player_speed
                     if self.player_x + 50 >= self.player_goal_line_x:
                         self.goal_line1 = load_image('resource/goal_line_2.png')
-                elif self.player_x >= 1200:  # 기록 비교 후 승리 판정
+                elif self.player_x >= self.player_goal_line_x:  # 기록 비교 후 승리 판정
                     self.player_frame = 0
-                    if self.player_timer < self.ai_timer:
+                    if self.player_timer <= self.ai_timer:
                         self.player_state = 'WIN'
-                    elif self.player_timer > self.ai_timer:
+                    elif self.player_timer >= self.ai_timer:
                         self.player_state = 'LOSE'
                 else:
                     self.player_x += 40
