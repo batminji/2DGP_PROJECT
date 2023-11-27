@@ -49,24 +49,12 @@ class Marathon:
         self.player_x = 0
         self.player_frame = 0
         self.player_state = 'WALK'
+        self.player_speed = 40
     def handle_events(self, e):
         if e.type == SDL_KEYDOWN and e.key == SDLK_SPACE:
             if self.player_state == 'RUN':
-                self.player_frame = (self.player_frame + 1) % 6
-                if self.player_track_x < 1450:
-                    self.player_track_x += 40
-                elif self.player_track_x >= 1450 and self.player_track_x < 1850:
-                    self.player_track_x += 40
-                    self.player_goal_line_x -= 90
-                else:
-                    if self.player_x >= 955 and self.player_x < 1055:  # 기록 측정 하기
-                        self.player_x += 40
-                        self.goal_line1 = load_image('resource/goal_line_2.png')
-                    elif self.player_x >= 1200:  # 기록 비교 후 승리 판정
-                        self.player_frame = 0
-                        self.player_state = 'WIN'
-                    else:
-                        self.player_x += 40
+                if self.player_speed <= 70:
+                    self.player_speed += 10
 
 
     def update(self):
@@ -91,11 +79,29 @@ class Marathon:
         elif self.player_state == 'READY':
             self.player_ready_move()
         elif self.player_state == 'RUN':
-            pass
+            self.player_frame = (self.player_frame + 1) % 6
+            if self.player_track_x < 1450:
+                self.player_track_x += self.player_speed
+            elif self.player_track_x >= 1450 and self.player_track_x < 1850:
+                self.player_track_x += self.player_speed
+                self.player_goal_line_x -= self.player_speed * 2
+            else:
+                if self.player_x >= 955 and self.player_x < 1055:  # 기록 측정 하기
+                    self.player_x += self.player_speed
+                    if self.player_x >= self.player_goal_line_x:
+                        self.goal_line1 = load_image('resource/goal_line_2.png')
+                elif self.player_x >= 1200:  # 기록 비교 후 승리 판정
+                    self.player_frame = 0
+                    self.player_state = 'WIN'
+                else:
+                    self.player_x += 40
         elif self.player_state == 'WIN':
             self.player_frame = (self.player_frame + 1) % 2
         elif self.player_state == 'LOSE':
             self.player_frame = (self.player_frame + 1) % 2
+
+        if self.player_speed >= 20:
+            self.player_speed -= 5
 
     def player_ready_move(self):
         delay(0.5)
