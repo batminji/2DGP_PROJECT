@@ -84,11 +84,11 @@ class Marathon:
                 self.player_track_x += self.player_speed
             elif self.player_track_x >= 1450 and self.player_track_x < 1850:
                 self.player_track_x += self.player_speed
-                self.player_goal_line_x -= self.player_speed * 2
+                self.player_goal_line_x -= self.player_speed * 2.5
             else:
                 if self.player_x >= 955 and self.player_x < 1055:  # 기록 측정 하기
                     self.player_x += self.player_speed
-                    if self.player_x >= self.player_goal_line_x:
+                    if self.player_x + 50 >= self.player_goal_line_x:
                         self.goal_line1 = load_image('resource/goal_line_2.png')
                 elif self.player_x >= 1200:  # 기록 비교 후 승리 판정
                     self.player_frame = 0
