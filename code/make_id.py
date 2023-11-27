@@ -112,6 +112,7 @@ class MakeID:
 
         # self.score_font.draw(1450, 900, '%.3f sec'%self.ai_timer, (255, 255, 255))
         self.font.draw(1000, 350, "PLAYER", (self.color_R, self.color_G, self.color_B))
+        self.font.draw(1000, 250, f'{self.ID}', (self.color_R, self.color_G, self.color_B))
         pass
 
     def handle_events(self, e):
