@@ -14,6 +14,8 @@ class LongJump:
         self.game_start_effect = load_music('MUSIC/game_start_bgm.mp3')
         self.game_start_effect.play()
         self.game_over_effect = load_music('MUSIC/game_over_bgm.mp3')
+        self.run_sound = load_music('MUSIC/run_alone_sound.mp3')
+        self.jump_sound = load_music('MUSIC/long_jump_sound.mp3')
         # score
         self.score_board = load_image('resource/score_board.png')
         self.score_font = load_font('Font/DungGeunMo.ttf', 60)
@@ -24,7 +26,7 @@ class LongJump:
         self.player_longjump = load_image('JUMP_PLAYER/player_longjump.png')
         self.player_win = load_image('JUMP_PLAYER/player_win.png')
         self.player_state = 'WALK'
-        self.player_frame, self.player_x, self.player_y, self.player_time = 0, -75, 225, 0
+        self.player_frame, self.player_x, self.player_y, self.player_time = 0, -200, 225, 0
         self.player_frame_cnt = 0
 
         # track
@@ -58,7 +60,7 @@ class LongJump:
         if self.player_state == 'READY' and e.type == SDL_KEYDOWN and e.key == SDLK_SPACE:
             self.player_state = 'JUMP'
             not_radian_angle = self.angle * 180 // PI
-            print(not_radian_angle)
+            self.jump_sound.repeat_play()
 
     def update(self):
         if self.player_state == 'WALK':
@@ -101,6 +103,7 @@ class LongJump:
             self.player_frame_cnt = 0
             self.sand_mark_x = self.player_x
             self.sand_mark_y = self.player_y - 75
+            self.jump_sound.stop()
         if self.player_frame < 4:
             self.player_frame_cnt += 1
             if self.player_frame_cnt == 5:
@@ -132,6 +135,7 @@ class LongJump:
         if self.player_x >= 250:
             self.player_state = 'READY'
             self.player_frame = 0
+            self.run_sound.stop()
 
     def player_walk_move(self):
         self.player_frame = (self.player_frame + 1) % 9
@@ -139,6 +143,7 @@ class LongJump:
         if self.player_x >= 100:
             self.player_frame = 0
             self.player_state = 'RUN'
+            self.run_sound.repeat_play()
 
     def draw(self):
         # sky
