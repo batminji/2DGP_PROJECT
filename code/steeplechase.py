@@ -2,15 +2,7 @@ from pico2d import *
 
 SCREENX, SCREENY = 1915, 1015
 
-
-# state
-# 0 : 걷기
-# 1 : 준비
-# 2 : 달리기
-# 3 : 점프하기
-# 4 : 넘어짐
-# 5 : 이김
-# 6 : 짐
+cnt = 0
 
 class Steeplechase:
     def __init__(self, ID):
@@ -68,8 +60,12 @@ class Steeplechase:
         self.player_lose = load_image('STEEPLE_PLAYER/player_lose.png')
         self.player_x, self.player_y, self.player_state, self.player_frame = -400, 125, 'WALK', 0
         self.player_goal_line = load_image('resource/goal_line_1.png')
-        self.player_goal_line_x = 3200
+        self.player_goal_line_x = 3700
         self.player_score = 0
+
+        # key board
+        self.del_key = load_image('KEYBOARD/delete_key.png')
+        self.del_key_frame = 0
 
     def handle_events(self, e):
         if e.type == SDL_KEYDOWN and e.key == SDLK_SPACE:
@@ -90,6 +86,7 @@ class Steeplechase:
         return True
 
     def update(self):
+        global cnt
         # background
         self.background_move()
 
@@ -111,9 +108,11 @@ class Steeplechase:
             self.ai_hurdle_delete()
             self.ai_hurdle_jump_frame()
         elif self.ai_state == 'WIN':
-            self.ai_frame = (self.ai_frame + 1 ) % 2
+            if cnt % 5 == 0:
+                self.ai_frame = (self.ai_frame + 1 ) % 2
         elif self.ai_state == 'LOSE':
-            self.ai_frame = (self.ai_frame + 1 ) % 2
+            if cnt % 5 == 0:
+                self.ai_frame = (self.ai_frame + 1 ) % 2
 
         # player
         if self.player_state == 'WALK':
@@ -135,6 +134,10 @@ class Steeplechase:
                 self.player_track_x += 20
                 self.player_goal_line_x -= 20
             else: # track 움직이지 않을 때
+                if self.player_x + 100 >= self.player_hurdle_x[1] and not (self.player_x > self.player_hurdle_x[1]) and self.hurdle_state[1] == 0:
+                    self.player_state, self.player_frame = 'FALLDOWN', 0
+                    self.hurdle_state[1] = 1
+                    self.player_score -= 150
                 if self.player_x >= self.player_goal_line_x - 40 and self.player_x <= self.player_goal_line_x + 40:  # 기록 측정 하기
                     self.player_x += 20
                     self.player_goal_line = load_image('resource/goal_line_2.png')
@@ -184,9 +187,17 @@ class Steeplechase:
             if self.player_frame == 8:
                 self.player_state, self.player_frame = 'RUN', 0
         elif self.player_state == 'WIN': # 이김
-            self.player_frame = (self.player_frame + 1 ) % 2
+            cnt += 1
+            if cnt % 5 == 0:
+                self.player_frame = (self.player_frame + 1 ) % 2
+                self.del_key_frame = (self.del_key_frame + 1) % 2
+                cnt = 0
         elif self.player_state == 'LOSE': # 짐
-            self.player_frame = (self.player_frame + 1 ) % 2
+            cnt += 1
+            if cnt % 5 == 0:
+                self.player_frame = (self.player_frame + 1) % 2
+                self.del_key_frame = (self.del_key_frame + 1) % 2
+                cnt = 0
 
     def player_ready_move(self):
         delay(0.5)
@@ -329,8 +340,10 @@ class Steeplechase:
             self.player_falldown.clip_draw(self.player_frame * 100, 0, 100, 68, self.player_x, self.player_y, 150, 100)
         elif self.player_state == 'WIN': # 이김
             self.player_win.clip_draw(self.player_frame * 72, 0, 72, 96, self.player_x, self.player_y, 125, 150)
+            self.del_key.clip_draw(self.del_key_frame * 18, 0, 18, 12, self.player_x + 100, self.player_y - 75, 90, 60)
         elif self.player_state == 'LOSE': # 짐
             self.player_lose.clip_draw(self.player_frame * 48, 0, 48, 96, self.player_x, self.player_y, 75, 150)
+            self.del_key.clip_draw(self.del_key_frame * 18, 0, 18, 12, self.player_x + 100, self.player_y - 75, 90, 60)
 
         # score
         self.score_board.clip_draw(0, 0, 135, 135, 1650, 850, 500, 300)

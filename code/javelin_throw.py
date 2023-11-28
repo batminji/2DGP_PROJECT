@@ -3,6 +3,7 @@ import math
 
 SCREENX, SCREENY = 1915, 1015
 PI = 3.141592
+cnt = 0
 
 # state
 # 0 : 걷기
@@ -49,6 +50,9 @@ class JavelinThrow:
         self.arrow_x, self.arrow_y, self.angle = 0, 0, 0
         self.angle_dir = True
         self.angle_cnt = 0
+        # key board
+        self.del_key = load_image('KEYBOARD/delete_key.png')
+        self.del_key_frame = 0
 
     def handle_events(self, e):
         if self.player_state == 'THROW_READY' and e.type == SDL_KEYDOWN and e.key == SDLK_SPACE:
@@ -56,6 +60,7 @@ class JavelinThrow:
             self.throw_sound.repeat_play()
 
     def update(self):
+        global cnt
         if self.player_state == 'WALK':
             self.player_walk_move()
         elif self.player_state == 'RUN':
@@ -67,6 +72,11 @@ class JavelinThrow:
             self.score += 10
             self.stick_angle_move()
             self.stick_landing_judgement()
+        elif self.player_state == 'DONE':
+            cnt += 1
+            if cnt % 5 == 0:
+                self.del_key_frame = (self.del_key_frame + 1) % 2
+                cnt = 0
 
         if self.player_state == 'RUN' or self.player_state == 'THROW':
             self.crowd_x = (self.crowd_x + 1) % 250
@@ -77,10 +87,10 @@ class JavelinThrow:
         if not_radian_angle < 0.0:
             not_radian_angle = -not_radian_angle
         stick_bottom = self.stick_y - math.sin(not_radian_angle) * 150
-        if stick_bottom <= 270:
+        if stick_bottom <= 250:
             self.throw_sound.stop()
             self.player_state = 'DONE'
-            self.stick_y = 270 + math.sin(not_radian_angle) * 150
+            self.stick_y = stick_bottom + math.sin(not_radian_angle) * 150
             self.game_over_effect.play()
 
     def stick_angle_move(self):
@@ -153,6 +163,7 @@ class JavelinThrow:
             self.stick.clip_composite_draw(0, 0, 100, 3, self.angle, '', self.stick_x, self.stick_y, 300, 9)
         elif self.player_state == 'DONE':
             self.stick.clip_composite_draw(0, 0, 100, 3, self.angle, '', self.stick_x, self.stick_y, 300, 9)
+            self.del_key.clip_draw(self.del_key_frame * 18, 0, 18, 12, self.stick_x + 200, 240, 90, 60)
 
 
         # player

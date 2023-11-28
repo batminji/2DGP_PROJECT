@@ -9,13 +9,8 @@ class Score:
     def __init__(self, game_mode, score):
         self.game_mode, self.score = game_mode, score
 
+cnt = 0
 
-# state
-# 0 : 걷기
-# 1 : 준비
-# 2 : 달리기
-# 3 : 이김
-# 4 : 짐
 
 class Marathon:
     def __init__(self, ID):
@@ -68,6 +63,9 @@ class Marathon:
         # timer
         self.ai_timer, self.player_timer = 0, 0
         self.start_time, self.end_time = 0, 0
+        # key board
+        self.del_key = load_image('KEYBOARD/delete_key.png')
+        self.del_key_frame = 0
     def handle_events(self, e):
         if e.type == SDL_KEYDOWN and e.key == SDLK_SPACE:
             if self.player_state == 'RUN':
@@ -76,6 +74,7 @@ class Marathon:
 
 
     def update(self):
+        global cnt
         self.end_time = get_time()
         # background
         if self.ai_state == 'RUN':
@@ -89,9 +88,11 @@ class Marathon:
             self.ai_timer = self.end_time - self.start_time
             self.ai_run_move()
         elif self.ai_state == 'WIN':  # 이김
-            self.ai_frame = (self.ai_frame + 1) % 2
+            if cnt % 5 == 0:
+                self.ai_frame = (self.ai_frame + 1) % 2
         elif self.ai_state == 'LOSE':  # 짐
-            self.ai_frame = (self.ai_frame + 1) % 2
+            if cnt % 5 == 0:
+                self.ai_frame = (self.ai_frame + 1) % 2
 
         # player
         if self.player_state == 'WALK':
@@ -111,22 +112,32 @@ class Marathon:
                     self.player_x += self.player_speed
                     if self.player_x + 50 >= self.player_goal_line_x:
                         self.goal_line1 = load_image('resource/goal_line_2.png')
-                elif self.player_x >= self.player_goal_line_x:  # 기록 비교 후 승리 판정
+                elif self.player_x - 75 >= self.player_goal_line_x:  # 기록 비교 후 승리 판정
                     self.player_frame = 0
                     if self.ai_state == 'RUN':
                         self.player_state = 'WIN'
                         self.run_sound.stop()
                         self.game_over_effect.play()
+                        cnt = 0
                     else:
                         self.player_state = 'LOSE'
                         self.run_sound.stop()
                         self.game_over_effect.play()
+                        cnt = 0
                 else:
                     self.player_x += 40
         elif self.player_state == 'WIN':
-            self.player_frame = (self.player_frame + 1) % 2
+            cnt += 1
+            if cnt % 5 == 0:
+                self.player_frame = (self.player_frame + 1) % 2
+                self.del_key_frame = (self.del_key_frame + 1) % 2
+                cnt = 0
         elif self.player_state == 'LOSE':
-            self.player_frame = (self.player_frame + 1) % 2
+            cnt += 1
+            if cnt % 5 == 0:
+                self.player_frame = (self.player_frame + 1) % 2
+                self.del_key_frame = (self.del_key_frame + 1) % 2
+                cnt = 0
 
         if self.player_speed >= 20:
             self.player_speed -= 5
@@ -157,7 +168,7 @@ class Marathon:
             if self.ai_x >= 955 and self.ai_x < 1055:  # 기록 측정 하기
                 self.ai_x += 20
                 self.goal_line2 = load_image('resource/goal_line_2.png')
-            elif self.ai_x >= self.ai_goal_line_x:  # 기록 비교 후 승리 판정
+            elif self.ai_x - 75 >= self.ai_goal_line_x:  # 기록 비교 후 승리 판정
                 self.ai_frame = 0
                 if self.player_state == 'RUN':
                     self.ai_state = 'WIN'
@@ -224,8 +235,10 @@ class Marathon:
             self.player_run.clip_draw(self.player_frame * 93, 0, 93, 96, self.player_x, 125, 150, 150)
         elif self.player_state == 'WIN':
             self.player_win.clip_draw(self.player_frame * 72, 0, 72, 96, self.player_x, 125, 100, 150)
+            self.del_key.clip_draw(self.del_key_frame * 18, 0, 18, 12, self.player_x + 100, 50, 90, 60)
         elif self.player_state == 'LOSE':
             self.player_lose.clip_draw(self.player_frame * 48, 0, 48, 96, self.player_x, 125, 75, 150)
+            self.del_key.clip_draw(self.del_key_frame * 18, 0, 18, 12, self.player_x + 100, 50, 90, 60)
 
         # score
         self.score_board.clip_draw(0, 0, 135, 135, 1650, 850, 500, 300)

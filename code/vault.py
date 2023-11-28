@@ -2,14 +2,8 @@ from pico2d import *
 
 SCREENX, SCREENY = 1915, 1015
 
+cnt = 0
 
-# state
-# 0 : 걷기
-# 1 : 달리기
-# 2 : 점프
-# 3 : 돌기
-# 4 : 도착
-# 5 : 이김
 
 class Vault:
     def __init__(self, ID):
@@ -59,6 +53,9 @@ class Vault:
         # sky
         self.sky = load_image('resource/sky.png')
         self.sky_x = 0
+        # key board
+        self.del_key = load_image('KEYBOARD/delete_key.png')
+        self.del_key_frame = 0
 
         global press_a, press_s, press_d
         press_a, press_s, press_d = False, False, True
@@ -76,6 +73,7 @@ class Vault:
             press_s, press_d = press_d, press_s
 
     def update(self):
+        global cnt
         if self.player_state == 'WALK':
             self.player_frame = (self.player_frame + 1) % 9
             self.player_x += 5
@@ -131,13 +129,19 @@ class Vault:
                     self.player_state = 'LANDING'
                     self.player_y += 50
                     self.game_over_effect.play()
+                    cnt = 0
         elif self.player_state == 'LANDING':
-            delay(1.5)
-            self.player_state = 'WIN'
+            cnt += 1
+            if cnt % 10 == 0:
+                self.player_state = 'WIN'
+                cnt = 0
         elif self.player_state == 'WIN':
-            delay(0.1)
-            self.player_frame = (self.player_frame + 1) % 2
-            self.judge_frame = (self.judge_frame + 1) % 2
+            cnt += 1
+            if cnt % 5 == 0:
+                self.player_frame = (self.player_frame + 1) % 2
+                self.judge_frame = (self.judge_frame + 1) % 2
+                self.del_key_frame = (self.del_key_frame + 1) % 2
+                cnt = 0
 
     def draw(self):
         # sky
@@ -180,6 +184,7 @@ class Vault:
             self.player_finish.clip_draw(0, 0, 49, 104, self.player_x, self.player_y, 75, 150)
         elif self.player_state == 'WIN':
             self.player_win.clip_draw(self.player_frame * 72, 0, 72, 96, self.player_x, self.player_y, 100, 150)
+            self.del_key.clip_draw(self.del_key_frame * 18, 0, 18, 12, self.player_x + 100, self.player_y - 75, 90, 60)
 
         # score
         self.score_board.clip_draw(0, 0, 135, 135, 1650, 850, 500, 300)

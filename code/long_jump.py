@@ -4,6 +4,7 @@ import math
 SCREENX, SCREENY = 1915, 1015
 PI = 3.141592
 Velocity = 8
+cnt = 0
 
 # state
 
@@ -56,6 +57,10 @@ class LongJump:
         self.angle_dir = True
         self.angle_cnt = 0
 
+        # key board
+        self.del_key = load_image('KEYBOARD/delete_key.png')
+        self.del_key_frame = 0
+
     def handle_events(self, e):
         if self.player_state == 'READY' and e.type == SDL_KEYDOWN and e.key == SDLK_SPACE:
             self.player_state = 'JUMP'
@@ -63,6 +68,7 @@ class LongJump:
             self.jump_sound.repeat_play()
 
     def update(self):
+        global cnt
         if self.player_state == 'WALK':
             self.player_walk_move()
         elif self.player_state == 'RUN':
@@ -78,10 +84,16 @@ class LongJump:
             self.player_win_move()
 
     def player_win_move(self):
+        global cnt
         self.player_frame_cnt += 1
         if self.player_frame_cnt > 5:
             self.player_frame = (self.player_frame + 1) % 2
             self.player_frame_cnt = 0
+
+        cnt += 1
+        if cnt % 5 == 0:
+            self.del_key_frame = (self.del_key_frame + 1) % 2
+            cnt = 0
 
     def player_landing_move(self):
         self.player_frame_cnt += 1
@@ -189,6 +201,7 @@ class LongJump:
             self.player_longjump.clip_draw(self.player_frame * 66, 0, 66, 96, self.player_x, self.player_y, 100, 150)
         elif self.player_state == 'WIN':
             self.player_win.clip_draw(self.player_frame * 72, 0, 72, 96, self.player_x, self.player_y, 112, 150)
+            self.del_key.clip_draw(self.del_key_frame * 18, 0, 18, 12, self.player_x + 100, self.player_y - 75, 90, 60)
 
         # score
         self.score_board.clip_draw(0, 0, 135, 135, 1650, 850, 500, 300)
