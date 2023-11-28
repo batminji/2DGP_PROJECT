@@ -18,6 +18,9 @@ class Vault:
         self.game_start_effect = load_music('MUSIC/game_start_bgm.mp3')
         self.game_start_effect.play()
         self.game_over_effect = load_music('MUSIC/game_over_bgm.mp3')
+        self.ready_sound = load_music('MUSIC/ready.wav')
+        self.run_sound = load_music('MUSIC/run_alone_sound.mp3')
+        self.jump_sound = load_music('MUSIC/long_jump_sound.mp3')
         # score
         self.score_board = load_image('resource/score_board.png')
         self.score_font = load_font('Font/DungGeunMo.ttf', 60)
@@ -36,7 +39,7 @@ class Vault:
         self.player_rotate = load_image('VAULT_PLAYER/player_vault_rotate.png')
         self.player_finish = load_image('VAULT_PLAYER/player_vault_finish.png')
         self.player_win = load_image('VAULT_PLAYER/player_win.png')
-        self.player_x, self.player_y = -50, 280
+        self.player_x, self.player_y = -200, 280
         self.player_frame = 0
         self.player_state = 'WALK'
         self.player_rad = 0
@@ -77,6 +80,7 @@ class Vault:
             self.player_frame = (self.player_frame + 1) % 9
             self.player_x += 5
             if self.player_x >= 250:
+                self.run_sound.repeat_play()
                 self.player_state = 'RUN'
                 self.player_frame = 0
         elif self.player_state == 'RUN':
@@ -87,6 +91,7 @@ class Vault:
             self.judge_x -= 20
             self.score_x -= 20
             if self.vault_board_x <= 200:
+                self.run_sound.stop()
                 self.player_state = 'JUMP'
                 self.player_frame = 0
         elif self.player_state == 'JUMP':
@@ -110,6 +115,7 @@ class Vault:
                 self.player_y += 20
             elif self.player_frame == 4:
                 delay(0.5)
+                self.jump_sound.repeat_play()
                 self.player_state = 'TURN'
                 self.player_frame = 0
         elif self.player_state == 'TURN':
@@ -121,6 +127,7 @@ class Vault:
                 self.player_x += 10
                 self.player_y -= 10
                 if self.player_y <= 250:
+                    self.jump_sound.stop()
                     self.player_state = 'LANDING'
                     self.player_y += 50
                     self.game_over_effect.play()
