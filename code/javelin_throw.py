@@ -17,6 +17,8 @@ class JavelinThrow:
         self.game_start_effect = load_music('MUSIC/game_start_bgm.mp3')
         self.game_start_effect.play()
         self.game_over_effect = load_music('MUSIC/game_over_bgm.mp3')
+        self.run_sound = load_music('MUSIC/run_alone_sound.mp3')
+        self.throw_sound = load_music('MUSIC/long_jump_sound.mp3')
         # score
         self.score_board = load_image('resource/score_board.png')
         self.score_font = load_font('Font/DungGeunMo.ttf', 60)
@@ -51,6 +53,7 @@ class JavelinThrow:
     def handle_events(self, e):
         if self.player_state == 'THROW_READY' and e.type == SDL_KEYDOWN and e.key == SDLK_SPACE:
             self.player_state = 'THROW'
+            self.throw_sound.repeat_play()
 
     def update(self):
         if self.player_state == 'WALK':
@@ -75,6 +78,7 @@ class JavelinThrow:
             not_radian_angle = -not_radian_angle
         stick_bottom = self.stick_y - math.sin(not_radian_angle) * 150
         if stick_bottom <= 270:
+            self.throw_sound.stop()
             self.player_state = 'DONE'
             self.stick_y = 270 + math.sin(not_radian_angle) * 150
             self.game_over_effect.play()
@@ -114,6 +118,7 @@ class JavelinThrow:
         self.player_frame = (self.player_frame + 1) % 9
         self.track_x -= 10
         if (self.player_x >= self.track_x - (SCREENX / 2.0) - 50):
+            self.run_sound.stop()
             self.player_state = 'THROW_READY'
             self.player_frame = 0
             self.stick_y = 420
@@ -122,6 +127,7 @@ class JavelinThrow:
         self.player_x += 5
         self.player_frame = (self.player_frame + 1) % 9
         if self.player_x >= 500:
+            self.run_sound.repeat_play()
             self.player_state = 'RUN'
             self.player_frame = 0
             self.stick_x, self.stick_y = self.player_x - 20, 400
