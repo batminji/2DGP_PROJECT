@@ -13,12 +13,14 @@ class MakeID:
         self.font = load_font('Font/DungGeunMo.ttf', 80)
         self.box_x, self.box_y, self.box_size = 1000, 460, 100
         self.ID = ''
-        self.color_R, self.color_G, self.color_B = 255, 255, 255
+        self.color = 0
         self.bgm = load_music('MUSIC/select_name_bgm.mp3')
         self.bgm.repeat_play()
         pass
 
     def update(self):
+        self.color = (self.color + 1)%4
+
         match(self.select):
             case 0:
                 self.box_x, self.box_y = 1000, 460
@@ -112,9 +114,22 @@ class MakeID:
         self.background.clip_draw(0, 0, 1280, 720, SCREENX / 2, SCREENY / 2, SCREENX, SCREENY)
         self.select_box.clip_draw(0, 0, 35, 35, self.box_x, self.box_y, self.box_size, 100)
 
-        # self.score_font.draw(1450, 900, '%.3f sec'%self.ai_timer, (255, 255, 255))
-        self.font.draw(1000, 350, "PLAYER", (self.color_R, self.color_G, self.color_B))
-        self.font.draw(1000, 250, f'{self.ID}', (self.color_R, self.color_G, self.color_B))
+        if self.color == 0:
+            self.font.draw(650, 600, "ENTER YOUR NAME", (255, 255, 255))
+            self.font.draw(1000, 350, "PLAYER", (255, 255, 255))
+            self.font.draw(1000, 250, f'{self.ID}', (255, 255, 255))
+        elif self.color == 1:
+            self.font.draw(650, 600, "ENTER YOUR NAME", (255, 0, 0))
+            self.font.draw(1000, 350, "PLAYER", (255, 0, 0))
+            self.font.draw(1000, 250, f'{self.ID}', (255, 0, 0))
+        elif self.color == 2:
+            self.font.draw(650, 600, "ENTER YOUR NAME", (255, 255, 0))
+            self.font.draw(1000, 350, "PLAYER", (255, 255, 0))
+            self.font.draw(1000, 250, f'{self.ID}', (255, 255, 0))
+        elif self.color == 3:
+            self.font.draw(650, 600, "ENTER YOUR NAME", (0, 0, 255))
+            self.font.draw(1000, 350, "PLAYER", (0, 0, 255))
+            self.font.draw(1000, 250, f'{self.ID}', (0, 0, 255))
         pass
 
     def handle_events(self, e):

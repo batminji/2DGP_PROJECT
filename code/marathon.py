@@ -24,6 +24,8 @@ class Marathon:
         self.game_start_effect = load_music('MUSIC/game_start_bgm.mp3')
         self.game_start_effect.play()
         self.game_over_effect = load_music('MUSIC/game_over_bgm.mp3')
+        self.game_ready_effect = load_music('MUSIC/ready.wav')
+        self.run_sound = load_music('MUSIC/run_sound.mp3')
         # score
         self.score_board = load_image('resource/score_board.png')
         self.score_font = load_font('Font/DungGeunMo.ttf', 60)
@@ -111,11 +113,13 @@ class Marathon:
                         self.goal_line1 = load_image('resource/goal_line_2.png')
                 elif self.player_x >= self.player_goal_line_x:  # 기록 비교 후 승리 판정
                     self.player_frame = 0
-                    if self.player_timer <= self.ai_timer:
+                    if self.ai_state == 'RUN':
                         self.player_state = 'WIN'
+                        self.run_sound.stop()
                         self.game_over_effect.play()
-                    elif self.player_timer >= self.ai_timer:
+                    else:
                         self.player_state = 'LOSE'
+                        self.run_sound.stop()
                         self.game_over_effect.play()
                 else:
                     self.player_x += 40
@@ -132,12 +136,15 @@ class Marathon:
         self.player_frame += 1
         if self.player_frame == 4:
             self.player_state, self.player_frame = 'RUN', 0
+            self.run_sound.repeat_play()
+
 
     def player_walk_move(self):
         self.player_frame = (self.player_frame + 1) % 9
         self.player_x += 10
         if self.player_x >= 330:
             self.player_state, self.player_frame = 'READY', 0
+            self.game_ready_effect.play()
 
     def ai_run_move(self):
         self.ai_frame = (self.ai_frame + 1) % 6
@@ -152,9 +159,9 @@ class Marathon:
                 self.goal_line2 = load_image('resource/goal_line_2.png')
             elif self.ai_x >= self.ai_goal_line_x:  # 기록 비교 후 승리 판정
                 self.ai_frame = 0
-                if self.ai_timer <= self.player_timer:
+                if self.player_state == 'RUN':
                     self.ai_state = 'WIN'
-                elif self.ai_timer >= self.player_timer:
+                else:
                     self.ai_state = 'LOSE'
             else:
                 self.ai_x += 20
