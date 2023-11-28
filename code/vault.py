@@ -56,6 +56,8 @@ class Vault:
         # key board
         self.del_key = load_image('KEYBOARD/delete_key.png')
         self.del_key_frame = 0
+        self.asd_key = load_image('KEYBOARD/asd_key.png')
+        self.asd_key_frame = 0
 
         global press_a, press_s, press_d
         press_a, press_s, press_d = False, False, True
@@ -117,6 +119,10 @@ class Vault:
                 self.player_state = 'TURN'
                 self.player_frame = 0
         elif self.player_state == 'TURN':
+            cnt += 1
+            if cnt % 5 == 0:
+                self.asd_key_frame = (self.asd_key_frame + 1) % 3
+                cnt = 0
             self.player_score = (-self.player_rad) // 360
             if self.player_x <= 1200:
                 self.player_x += 10
@@ -178,6 +184,7 @@ class Vault:
             else:
                 self.player_jump.clip_draw(self.player_frame * 133, 0, 133, 133, self.player_x, self.player_y, 150, 150)
         elif self.player_state == 'TURN':  # 돌기
+            self.asd_key.clip_draw(self.asd_key_frame * 36, 0, 36, 12, 800, 400, 180, 60)
             self.player_rotate.clip_composite_draw(0, 0, 59, 67, self.player_rad, '', self.player_x, self.player_y, 90,
                                                    90)
         elif self.player_state == 'LANDING':
