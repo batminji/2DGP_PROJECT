@@ -19,6 +19,8 @@ class Steeplechase:
         self.game_start_effect = load_music('MUSIC/game_start_bgm.mp3')
         self.game_start_effect.play()
         self.game_over_effect = load_music('MUSIC/game_over_bgm.mp3')
+        self.run_sound = load_music('MUSIC/run_sound.mp3')
+
         # score
         self.score_board = load_image('resource/score_board.png')
         self.score_font = load_font('Font/DungGeunMo.ttf', 60)
@@ -52,7 +54,7 @@ class Steeplechase:
         self.ai_hurdle = load_image('STEEPLE_AI/ai_hurdle.png')
         self.ai_win = load_image('STEEPLE_AI/ai_win.png')
         self.ai_lose = load_image('STEEPLE_AI/ai_lose.png')
-        self.ai_x, self.ai_y, self.ai_state, self.ai_frame = 0, 325, 'WALK', 0
+        self.ai_x, self.ai_y, self.ai_state, self.ai_frame = -400, 325, 'WALK', 0
         self.ai_goal_line = load_image('resource/goal_line_1.png')
         self.ai_goal_line_x = 3200
         self.ai_score = 0
@@ -64,7 +66,7 @@ class Steeplechase:
         self.player_falldown = load_image('STEEPLE_PLAYER/player_falldown.png')
         self.player_win = load_image('STEEPLE_PLAYER/player_win.png')
         self.player_lose = load_image('STEEPLE_PLAYER/player_lose.png')
-        self.player_x, self.player_y, self.player_state, self.player_frame = 0, 125, 'WALK', 0
+        self.player_x, self.player_y, self.player_state, self.player_frame = -400, 125, 'WALK', 0
         self.player_goal_line = load_image('resource/goal_line_1.png')
         self.player_goal_line_x = 3200
         self.player_score = 0
@@ -140,9 +142,11 @@ class Steeplechase:
                     self.player_frame = 0
                     if self.player_score >= self.ai_score:
                         self.player_state = 'WIN'
+                        self.run_sound.stop()
                         self.game_over_effect.play()
                     else:
                         self.player_state = 'LOSE'
+                        self.run_sound.stop()
                         self.game_over_effect.play()
                 else:
                     self.player_x += 20
@@ -189,6 +193,7 @@ class Steeplechase:
         self.player_frame += 1
         if self.player_frame == 4:
             self.player_state, self.player_frame = 'RUN', 0
+            self.run_sound.repeat_play()
 
     def player_walk_move(self):
         self.player_frame = (self.player_frame + 1) % 9
