@@ -66,6 +66,8 @@ class Marathon:
         # key board
         self.del_key = load_image('KEYBOARD/delete_key.png')
         self.del_key_frame = 0
+        self.space_key = load_image('KEYBOARD/space_key.png')
+        self.space_key_frame = 0
     def handle_events(self, e):
         if e.type == SDL_KEYDOWN and e.key == SDLK_SPACE:
             if self.player_state == 'RUN':
@@ -100,6 +102,11 @@ class Marathon:
         elif self.player_state == 'READY':
             self.player_ready_move()
         elif self.player_state == 'RUN':
+            cnt += 1
+            if cnt % 5 == 0:
+                self.space_key_frame = (self.space_key_frame + 1) % 2
+                cnt = 0
+
             self.player_timer = self.end_time - self.start_time
             self.player_frame = (self.player_frame + 1) % 6
             if self.player_track_x < 1450:
@@ -233,6 +240,7 @@ class Marathon:
             self.player_ready.clip_draw(self.player_frame * 96, 0, 96, 96, self.player_x, 125, 150, 150)
         elif self.player_state == 'RUN':
             self.player_run.clip_draw(self.player_frame * 93, 0, 93, 96, self.player_x, 125, 150, 150)
+            self.space_key.clip_draw(self.space_key_frame * 26, 0, 26, 12, 200, 150, 130, 60)
         elif self.player_state == 'WIN':
             self.player_win.clip_draw(self.player_frame * 72, 0, 72, 96, self.player_x, 125, 100, 150)
             self.del_key.clip_draw(self.del_key_frame * 18, 0, 18, 12, self.player_x + 100, 50, 90, 60)

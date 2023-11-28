@@ -60,6 +60,8 @@ class LongJump:
         # key board
         self.del_key = load_image('KEYBOARD/delete_key.png')
         self.del_key_frame = 0
+        self.space_key = load_image('KEYBOARD/space_key.png')
+        self.space_key_frame = 0
 
     def handle_events(self, e):
         if self.player_state == 'READY' and e.type == SDL_KEYDOWN and e.key == SDLK_SPACE:
@@ -74,6 +76,10 @@ class LongJump:
         elif self.player_state == 'RUN':
             self.player_run_move()
         elif self.player_state == 'READY':
+            cnt += 1
+            if cnt % 5 == 0:
+                self.space_key_frame = (self.space_key_frame + 1) % 2
+                cnt = 0
             self.arrow_move()
         elif self.player_state == 'JUMP':
             self.score_meter = (self.player_x - 250) / 100
@@ -194,6 +200,7 @@ class LongJump:
         elif self.player_state == 'RUN':
             self.player_run.clip_draw(self.player_frame * 93, 0, 93, 96, self.player_x, self.player_y, 150, 150)
         elif self.player_state == 'READY':
+            self.space_key.clip_draw(self.space_key_frame * 26, 0, 26, 12, self.player_x - 150, self.player_y - 75, 130, 60)
             self.player_longjump.clip_draw(0, 0, 66, 96, self.player_x, self.player_y, 100, 150)
         elif self.player_state == 'JUMP':
             self.player_longjump.clip_draw(self.player_frame * 66, 0, 66, 96, self.player_x, self.player_y, 100, 150)
@@ -202,6 +209,7 @@ class LongJump:
         elif self.player_state == 'WIN':
             self.player_win.clip_draw(self.player_frame * 72, 0, 72, 96, self.player_x, self.player_y, 112, 150)
             self.del_key.clip_draw(self.del_key_frame * 18, 0, 18, 12, self.player_x + 100, self.player_y - 75, 90, 60)
+
 
         # score
         self.score_board.clip_draw(0, 0, 135, 135, 1650, 850, 500, 300)

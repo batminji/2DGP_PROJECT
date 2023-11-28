@@ -53,6 +53,8 @@ class JavelinThrow:
         # key board
         self.del_key = load_image('KEYBOARD/delete_key.png')
         self.del_key_frame = 0
+        self.space_key = load_image('KEYBOARD/space_key.png')
+        self.space_key_frame = 0
 
     def handle_events(self, e):
         if self.player_state == 'THROW_READY' and e.type == SDL_KEYDOWN and e.key == SDLK_SPACE:
@@ -66,6 +68,10 @@ class JavelinThrow:
         elif self.player_state == 'RUN':
             self.player_run_move()
         elif self.player_state == 'THROW_READY':
+            cnt += 1
+            if cnt % 5 == 0:
+                self.space_key_frame = (self.space_key_frame + 1) % 2
+                cnt = 0
             self.arrow_angle_move()
             print(self.angle)
         elif self.player_state == 'THROW':
@@ -172,6 +178,7 @@ class JavelinThrow:
         elif self.player_state == 'RUN':
             self.player_run.clip_draw(self.player_frame * 96, 0, 96, 96, self.player_x, 350, 150, 150)
         elif self.player_state == 'THROW_READY':
+            self.space_key.clip_draw(self.space_key_frame * 26, 0, 26, 12, self.player_x - 150, 330, 130, 60)
             self.player_throw1.clip_draw(0, 0, 96, 96, self.player_x, 350, 150, 150)
         elif self.player_state == 'THROW':
             self.player_throw2.clip_draw(0, 0, 96, 96, self.player_x, 350, 150, 150)

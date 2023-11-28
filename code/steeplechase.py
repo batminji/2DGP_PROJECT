@@ -66,6 +66,8 @@ class Steeplechase:
         # key board
         self.del_key = load_image('KEYBOARD/delete_key.png')
         self.del_key_frame = 0
+        self.space_key = load_image('KEYBOARD/space_key.png')
+        self.space_key_frame = 0
 
     def handle_events(self, e):
         if e.type == SDL_KEYDOWN and e.key == SDLK_SPACE:
@@ -96,6 +98,11 @@ class Steeplechase:
         elif self.ai_state == 'READY':
             self.ai_ready_move()
         elif self.ai_state == 'RUN': # 달리기
+            cnt += 1
+            if cnt % 5 == 0:
+                self.space_key_frame = (self.space_key_frame + 1) % 2
+                cnt = 0
+
             self.ai_frame = (self.ai_frame + 1) % 6
             if self.ai_track_x <= 2371:
                 self.ai_track_move()
@@ -333,10 +340,13 @@ class Steeplechase:
         elif self.player_state == 'READY': # 준비
             self.player_ready.clip_draw(self.player_frame * 96, 0, 96, 96, self.player_x, self.player_y, 150, 150)
         elif self.player_state == 'RUN': # 달리기
+            self.space_key.clip_draw(self.space_key_frame * 26, 0, 26, 12, 150, 100, 130, 60)
             self.player_run.clip_draw(self.player_frame * 93, 0, 93, 96, self.player_x, self.player_y, 150, 150)
         elif self.player_state == 'JUMP': # 점프하기
+            self.space_key.clip_draw(self.space_key_frame * 26, 0, 26, 12, 150, 100, 130, 60)
             self.player_hurdle.clip_draw(self.player_frame * 78, 0, 78, 96, self.player_x, self.player_y, 125, 150)
         elif self.player_state == 'FALLDOWN': # 넘어지기
+            self.space_key.clip_draw(self.space_key_frame * 26, 0, 26, 12, 150, 100, 130, 60)
             self.player_falldown.clip_draw(self.player_frame * 100, 0, 100, 68, self.player_x, self.player_y, 150, 100)
         elif self.player_state == 'WIN': # 이김
             self.player_win.clip_draw(self.player_frame * 72, 0, 72, 96, self.player_x, self.player_y, 125, 150)
