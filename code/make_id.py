@@ -16,6 +16,8 @@ class MakeID:
         self.color = 0
         self.bgm = load_music('MUSIC/select_name_bgm.mp3')
         self.bgm.repeat_play()
+        self.effect = load_wav('MUSIC/game_select_sound.wav')
+
         pass
 
     def update(self):
@@ -134,11 +136,13 @@ class MakeID:
 
     def handle_events(self, e):
         if e.type == SDL_KEYDOWN and e.key == SDLK_LEFT:
+            self.effect.play()
             if self.select == 0:
                 self.select = 27
             else:
                 self.select -= 1
         elif e.type == SDL_KEYDOWN and e.key == SDLK_RIGHT:
+            self.effect.play()
             if self.select == 27:
                 self.select = 0
             else:
